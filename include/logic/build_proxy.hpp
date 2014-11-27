@@ -13,7 +13,7 @@ struct build_node {
 	self* next_node;
 	value_type* val;
 	
-    build_node() : next_node(NULL), val(new value_type()) {}
+    build_node() : next_node(NULL), val(NULL) {} // val(new value_type()) {}
 	~build_node()
 	{
         delete next_node; delete val;
@@ -36,6 +36,7 @@ public:
 		rows = top->height();
 		current_cols = cols = top->width();
         current_row = first = new row_node;
+        first->val = new matrix_node;
         current_matrix = first->val;
         current_matrix->val = top.release();
 		current_matrix->next_node = NULL;
@@ -116,7 +117,7 @@ public:
 		}
 	}*/
 	
-	bool add_to_right(return_type right)
+    bool add_to_right(return_type& right)
 	{
 		if (right->height() != current_matrix->val->height()) return false;
 		if (!first_row && current_cols + right->width() > cols) return false;
@@ -132,7 +133,7 @@ public:
 		return current_matrix->val != NULL;
 	}
 	
-	bool add_to_bottom(return_type bottom)
+    bool add_to_bottom(return_type& bottom)
 	{
 		if (current_cols != cols || bottom->width() > cols) return false;
 		is_string = is_string && bottom->is_string();
@@ -140,6 +141,7 @@ public:
 		rows += bottom->height();
 		first_row = false;
 		current_row->next_node = new row_node;
+        current_row->val = new matrix_node;
 		current_row = current_row->next_node;
 		current_row->next_node = NULL;
 		current_matrix = current_row->val;
