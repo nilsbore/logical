@@ -1,6 +1,8 @@
 #ifndef STRING_HPP
 #define STRING_HPP
 
+#include <cstdlib>
+
 namespace util {
 
 	class string {
@@ -37,13 +39,13 @@ namespace util {
 		
 		string(unsigned size) : size(size), vals(new char[size]) {}
 		
-		string() : size(0), vals(NULL) {}
+        string() : size(0), vals(NULL) {}
 		
 		bool is_empty() const { return size == 0; }
 		
 		char* c_str() { return vals; }
 		
-		void operator= (const self& other)
+        void operator= (const self& other)
 		{
 			delete[] vals;
 			size = other.size;
@@ -109,7 +111,7 @@ namespace util {
 		
 		bool operator== (const char* other) const
 		{
-			if (other == NULL || other == '\0') {
+            if (other == NULL || other == '\0') {
 				return false;
 			}
 			for (unsigned i = 0; i < size; ++i) {

@@ -12,7 +12,7 @@ namespace logic {
 	util::info_auto_ptr<Matrix, util::string> linspace(const Matrix& first,
 													   const Matrix& second)
 	{
-		if(!first.is_scalar() || !second.is_scalar()) return "Linspace boundaries are not scalar.";
+        if (!first.is_scalar() || !second.is_scalar()) return "Linspace boundaries are not scalar.";
 		
 		int a = first(0, 0);
 		int b = second(0, 0);
@@ -36,8 +36,8 @@ namespace logic {
 	{
 		typedef typename Matrix::value_type value_type;
 		
-		if(!second.is_scalar()) return "Linspace step is not scalar.";
-		if(first.width() != 1 || third.width() != 1) return "Linspace boundaries are not column vectors.";
+        if (!second.is_scalar()) return "Linspace step is not scalar.";
+        if (first.width() != 1 || third.width() != 1) return "Linspace boundaries are not column vectors.";
 		if (first.height() != third.height()) return "Linspace boundaries heights do not agree.";
 		
 		unsigned length = second(0, 0);
@@ -64,12 +64,12 @@ namespace logic {
 		unsigned rows = pos.height();
 		unsigned cols = pos.width();
 		
-		Matrix rtn(rows, cols);
-		rtn.set_string(value.is_string());
+        Matrix rtn(rows, cols);
+        rtn.set_string(value.is_string());
 
 		for (unsigned y = 0; y < rows; ++y) {
 			for (unsigned x = 0; x < cols; ++x) {
-				rtn(y, x) = value[(unsigned)pos(y, x)];
+                rtn(y, x) = value[(unsigned)pos(y, x)];
 			}
 		}
 		
@@ -85,13 +85,13 @@ namespace logic {
 		unsigned rows = row.length();
 		unsigned cols = col.length();
 		
-		Matrix* rtn;
+        Matrix rtn;
 		
-		rtn.set_string(value.is_string());
+        rtn.set_string(value.is_string());
 		
 		for (unsigned y = 0; y < rows; ++y) {
 			for (unsigned x = 0; x < cols; ++x) {
-				rtn(y, x) = value((unsigned)row[y], (unsigned)col[x]);
+                rtn(y, x) = value((unsigned)row[y], (unsigned)col[x]);
 			}
 		}
 		

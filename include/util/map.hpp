@@ -79,8 +79,8 @@ namespace util {
 			while (current != NULL) {
 				if (current->key == key) {
 					value_type rtn = current->val;
-					previous->next = current->next;
-					current->next = NULL;
+                    previous->next_node = current->next_node;
+                    current->next_node = NULL;
 					delete current;
 					length--;
 					return rtn;

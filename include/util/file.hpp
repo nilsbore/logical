@@ -10,8 +10,8 @@ namespace util {
 	class file {
 	public:
 		typedef file self;
-		typedef list<unsigned>::node_type* line_pos;
-		typedef list<char*>::node_type* data_pos;
+        typedef list<unsigned>::node* line_pos;
+        typedef list<char*>::node* data_pos;
 		
 		struct pos {
 			line_pos length;
@@ -75,8 +75,8 @@ namespace util {
 			if (value == NULL || length == 0) {
 				return;
 			}
-			data.insert(value);
-			line_length.insert(length);
+            data.insert(&value);
+            line_length.insert(&length);
 		}
 		
 		file(util::string& name) : data(), line_length()

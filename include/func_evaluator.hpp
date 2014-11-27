@@ -15,7 +15,10 @@ protected:
 	typedef OutStream out_stream;
 	typedef typename var::matrix_type matrix_type;
 	typedef typename var::return_type return_type;
-	typedef util::map<util::string, util::file*> func_map; 
+    typedef typename var::dense_type dense_type;
+    typedef typename var::sparse_type sparse_type;
+    typedef typename var::scalar_type scalar_type;
+    typedef util::map<util::string, util::file> func_map;
 	typedef util::list<util::list<util::string> > namespace_stack;
 	
 	void enter_namespace()
@@ -34,16 +37,16 @@ protected:
 	return_type function(const util::string& funcname, util::list<matrix_type>& args) {
 		return_type temp = base::function(funcname);
 		if (temp.valid()) return temp;
-		util::file* f = func_map.get_pointer(funcname);
+        util::file* f = functions.get_pointer(funcname);
 		if (f == NULL) return "No match for function.";
 		self func_eval(base::output);
 		return func_eval.evaluate_function(f, funcname, args);		
 	}
 	
-	return_type evaluate_function(util::file* func, util::string& funcname, util::list<matrix_type>& args)
+    return_type evaluate_function(util::file* func, const util::string& funcname, util::list<matrix_type>& args)
 	{
 		last_line = false;
-		util::string checkfunc = base::input.next_word();
+        util::string checkfunc = base::input.next_name();
 		if (checkfunc != "function") return "Function definition has to begin with function.";
 		base::input.next_blanks();
 		util::string rtnname;
@@ -51,15 +54,15 @@ protected:
 		if (*base::input != '=') return "Function has to return value with = operator";
 		base::input++;
 		base::input.next_blanks();
-		checkfunc = base::input.next_word();
+        checkfunc = base::input.next_name();
 		if (checkfunc != funcname) return "Function has to have same name as file.";
 		base::input.next_blanks();
 		if (*base::input != '(') return "Function has to take at least one parameter.";
 		base::input++;
-		for (args.begin(); args++; !args.end()) {
-			util::string varname = base::input.next_word();
+        for (args.begin(); !args.end(); args++) {
+            util::string varname = base::input.next_name();
 			if (varname.is_empty()) return "Invalid argument name.";
-			var::variables.insert(varname, *args);
+            var::variables.insert(varname, (*args).clone());
 			base::input.next_blanks();
 			if (*base::input == ')') {
 				break;
@@ -73,8 +76,8 @@ protected:
 		return_type temp = execute_statement(false);
 		//set_script(false); // perhaps not needed?
 		if (!temp.valid()) return temp;
-		matrix_type rtn = var::variables.pull(rtnname);
-		if (rtn.is_empty()) return "Return value hasn't been assigned.";
+        matrix_type* rtn = var::variables.pull(rtnname);
+        if (rtn->is_empty()) return "Return value hasn't been assigned.";
 		return rtn;
 	}
 	
@@ -82,7 +85,7 @@ protected:
 	{
 		return_type temp;
 		while (true) {
-			util::string word = base::input.get_name();
+            util::string word = base::input.next_name();
 			if (!word.is_empty()) {
 				if (word == "end") {
 					return return_type::VALID_VOID;
@@ -106,7 +109,7 @@ protected:
 	
 	return_type execute_while()
 	{
-		util::file::pos start = function->get_pos();
+        util::file::pos start = function_file->get_pos();
 		util::string statement = base::input.remaining_string();
 		return_type res = evaluate_statement(statement);
 		if (!res.valid()) return res;
@@ -114,7 +117,7 @@ protected:
 		if (res.value) {
 			enter_namespace();
 			do {
-				function->set_pos(start);
+                function_file->set_pos(start);
 				temp = execute_statement(false);
 				if (!temp.valid()) return temp;
 				res = evaluate_statement(statement);
@@ -122,7 +125,7 @@ protected:
 			}
 			while (res.value);
 			exit_namespace();
-			return;
+            return return_type::VALID_VOID; // DEBUG return;
 		}
 		next_line();
 		return skip_statement(false);
@@ -130,22 +133,22 @@ protected:
 	
 	return_type execute_for()
 	{
-		util::file::pos start = function->get_pos();
+        util::file::pos start = function_file->get_pos();
 		base::input.next_blanks();
-		util::string iter = base::input.next_word();
+        util::string iter = base::input.next_name();
 		if (iter.is_empty()) return "No name assigned for iterator.";
 		if (iter == "i") return "Can't assign other value to constant i;";
 		base::input.next_blanks();
-		if (base::input != '=') return "No assignment in for statement.";
+        if (*base::input != '=') return "No assignment in for statement.";
 		base::input++;
 		return_type loop = evaluate_statement();
 		if (!loop.valid()) return loop;
 		return_type temp;
 		enter_namespace();
-		for (unsigned row = 0; row < loop.value.height(); ++row) {
-			for (unsigned col = 0; col < loop.value.width(); ++col) {
-				function->set_pos(start);
-				var::variables.insert(iter, matrix_type::real_scalar(loop.value(row, col)));
+        for (unsigned row = 0; row < loop->height(); ++row) {
+            for (unsigned col = 0; col < loop->width(); ++col) {
+                function_file->set_pos(start);
+                var::variables.insert(iter, new scalar_type((*loop)(row, col)));
 				temp = execute_statement(false);
 				if (!temp.valid()) return temp;
 			}
@@ -166,7 +169,7 @@ protected:
 			return rtn;
 		}
 		while (true) {
-			util::string word = base::input.next_word();
+            util::string word = base::input.next_name();
 			if (!word.is_empty()) {
 				if (word == "end") {
 					return return_type::VALID_VOID;
@@ -175,7 +178,7 @@ protected:
 					if (!base::input.end() && *base::input == ' ') {
 						base::input++;
 						if (!base::input.end()) {
-							util::string word = base::input.next_word();
+                            util::string word = base::input.next_name();
 							if (!word.is_empty()) {
 								if (word == "if") {
 									return execute_if();
@@ -195,7 +198,7 @@ protected:
 	
 	void add_to_namespace(util::string& varname)
 	{
-		(*last_vars).insert(varname);
+        (*last_vars).insert(&varname);
 	}
 	
 	return_type evaluate_statement()
@@ -265,9 +268,9 @@ protected:
 	
 	return_type next_line()
 	{
-		(*function)++;
-		if (function->end()) return "End of file reached while evaluating function.";
-		base::input.new_expression(function->get_line(), function->get_length());
+        (*function_file)++;
+        if (function_file->end()) return "End of file reached while evaluating function.";
+        base::input.new_expression(function_file->get_line(), function_file->get_length());
 		return return_type::VALID_VOID;
 	}
 	
@@ -277,7 +280,7 @@ public:
 	
 private:
 	
-	util::file* function;
+    util::file* function_file;
 	func_map functions;
 	namespace_stack last_vars;
 	bool last_line;

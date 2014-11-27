@@ -10,11 +10,12 @@ namespace logic {
 	private:
 		
 		typedef string self;
-		typedef dense_matrix<Value> super;
+        typedef Value value_type;
+        typedef dense_matrix<value_type> super;
 		
 	private:
 		
-		char operator(unsigned y, unsigned x) const
+        char operator() (unsigned y, unsigned x) const
 		{
 			value_type rtn = (*super::this)(y, x);
 			if (rtn >= 'A' && rtn <= 'Z') {

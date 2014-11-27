@@ -1,6 +1,7 @@
 #ifndef VAR_EVALUATOR_HPP
 #define VAR_EVALUATOR_HPP
 
+#include <cassert>
 #include "base_evaluator.hpp"
 #include "util/map.hpp"
 #include "util/string.hpp"
@@ -17,7 +18,10 @@ protected:
 	typedef	base_evaluator<Value, OutStream> base;
 	typedef typename base::matrix_type matrix_type;
 	typedef typename base::return_type return_type;
-	typedef util::map<util::string, matrix_type> var_map;
+    typedef typename base::dense_type dense_type;
+    typedef typename base::sparse_type sparse_type;
+    typedef typename base::scalar_type scalar_type;
+    typedef util::map<util::string, matrix_type*> var_map;
 
 	return_type name(const util::string& arg)
 	{
@@ -25,9 +29,9 @@ protected:
 		if (temp.valid()) {
 			return temp;
 		}
-		matrix_type rtn = variables[arg];
-		if (rtn.is_empty()) return "Variable not found.";
-		return rtn;
+        matrix_type* rtn = variables[arg];
+        if (rtn->is_empty()) return "Variable not found.";
+        return rtn;
 	}
 	
 	virtual void add_to_namespace(util::string& varname) {}
@@ -46,8 +50,8 @@ protected:
 		base::input++;
 		return_type value = base::build_matrix(';', ';', true);
 		if (!value.valid()) return value;
-		matrix_type varvalue = value.value.clone();
-		util::string temp = varname.clone();
+        matrix_type varvalue = (*value).clone();
+        util::string temp = varname;
 		if (variables.insert(temp, varvalue)) {
 			add_to_namespace(varname);
 		}
@@ -56,7 +60,7 @@ protected:
 	
 	return_type index_assignment(const util::string& varname)
 	{
-		matrix_type* var = variables.get_pointer(varname);
+        matrix_type* var = variables[varname];
 		if (var == NULL) return "Right hand side variable not found.";
 		unsigned previousend = base::index_end;
 		if (var->is_vector()) {
@@ -76,7 +80,7 @@ protected:
 			base::input++;
 			value = base::build_matrix(';', ';', true);
 			if (!value.valid()) return value;
-			if(!assign_index(*var, first.value, value.value)) return "Assignment parameters don't match.";
+            if(!assign_index(*var, *first, *value)) return "Assignment parameters don't match.";
 			return var->clone();
 		}
 		if (*base::input != ',') return "Missing ',' in index argument.";
@@ -93,7 +97,7 @@ protected:
 		base::input++;
 		value = base::build_matrix(';', ';', true);
 		if (!value.valid()) return value;
-		if (!assign_index(*var, first.value, second.value, value.value)) return "Assignment parameters don't match.";
+        if (!assign_index(*var, *first, *second, *value)) return "Assignment parameters don't match.";
 		return var->clone();
 	}
 	
@@ -111,7 +115,7 @@ public:
 			rtn = base::build_matrix(';', ';', true);
 			if (rtn.valid()) {
 				util::string ans("ans");
-				matrix_type temp = rtn.value.clone();
+                matrix_type temp = rtn->clone();
 				variables.insert(ans, temp);
 			}
 		}		
@@ -120,10 +124,10 @@ public:
 				base::output << ' ';
 			}
 			base::output << "^\nCommand couldn't be evaluated. Terminated with error message:\n" 
-			<< rtn.message << '\n';
+            << rtn.get_info() << '\n';
 		}
 		else {
-			base::output << rtn.value;
+            base::output << *rtn;
 		}
 		return rtn;
 	}

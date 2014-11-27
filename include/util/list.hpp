@@ -111,7 +111,7 @@ namespace util {
 				return;
 			}
 			if (last->previous != NULL) {
-				last->previos->next = NULL;
+                last->previous->next = NULL;
 			}
 			if (first == last) {
 				first = NULL;

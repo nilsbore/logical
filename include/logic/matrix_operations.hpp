@@ -187,8 +187,9 @@ namespace logic {
 			}
 		}
 	};
-	
-	template <typename Operator, typename Matrix1, typename Matrix2>
+
+    /* DEBUG
+    template <typename Operator, typename Matrix1, typename Matrix2>
 	struct Implementation<Operator, Matrix1, const typename Matrix2::sparse_type> {
 		void operator() (row_iterator<Matrix1> first, row_iterator<const typename Matrix2::sparse_type> second, unsigned end)
 		{
@@ -225,7 +226,7 @@ namespace logic {
 				++first;
 			}
 		}
-	};
+    };*/ //DEBUG
 	
 	/*template <typename Matrix1, typename Matrix2>
 	struct Implementation<Add<typename Matrix1::value_type>, Matrix1, Matrix2>
