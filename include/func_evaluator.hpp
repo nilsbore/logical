@@ -14,13 +14,18 @@ protected:
 	typedef Value value_type;
 	typedef OutStream out_stream;
 	typedef typename var::matrix_type matrix_type;
-	typedef typename var::return_type return_type;
     typedef typename var::dense_type dense_type;
     typedef typename var::sparse_type sparse_type;
     typedef typename var::scalar_type scalar_type;
     typedef util::map<util::string, util::file> func_map;
 	typedef util::list<util::list<util::string> > namespace_stack;
-	
+
+public:
+
+    typedef typename var::return_type return_type;
+
+protected:
+
 	void enter_namespace()
 	{
 		last_vars.insert_empty();
@@ -37,7 +42,7 @@ protected:
 	return_type function(const util::string& funcname, util::list<matrix_type>& args) {
 		return_type temp = base::function(funcname);
 		if (temp.valid()) return temp;
-        util::file* f = functions.get_pointer(funcname);
+        util::file* f = functions[funcname];
 		if (f == NULL) return "No match for function.";
 		self func_eval(base::output);
 		return func_eval.evaluate_function(f, funcname, args);		
@@ -114,7 +119,7 @@ protected:
 		return_type res = evaluate_statement(statement);
 		if (!res.valid()) return res;
 		return_type temp;
-		if (res.value) {
+        if (*res) {
 			enter_namespace();
 			do {
                 function_file->set_pos(start);
@@ -123,7 +128,7 @@ protected:
 				res = evaluate_statement(statement);
 				if (!res.valid()) return res; 
 			}
-			while (res.value);
+            while (*res);
 			exit_namespace();
             return return_type::VALID_VOID; // DEBUG return;
 		}
@@ -162,7 +167,7 @@ protected:
 		return_type run = evaluate_statement();
 		if (!run.valid()) return run;
 		return_type rtn;
-		if (run.value) {
+        if (*run) {
 			enter_namespace();
 			rtn = execute_statement(true);
 			exit_namespace();
@@ -228,7 +233,7 @@ protected:
 			temp = next_line();
 			if (!temp.valid()) return temp;
 			pos = base::input.get_pos();
-			util::string word = base::input.next_word();
+            util::string word = base::input.next_name();
 			if (!word.is_empty()) {
 				if (word == "end") {
 					return return_type::VALID_VOID;

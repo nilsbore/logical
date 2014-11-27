@@ -20,9 +20,9 @@ namespace logic {
 		unsigned length = abs(b - a) + 1;
 		int step = b > a? 1 : -1;
 		
-		Matrix rtn(1, length);
+        Matrix* rtn = first.instantiate(1, length);
 		for (unsigned i = 0; i < length; i++) {
-			rtn(0, i) = a;
+            (*rtn)(0, i) = a;
 			a += step;
 		}
 		
@@ -42,13 +42,13 @@ namespace logic {
 		
 		unsigned length = second(0, 0);
 		
-		Matrix rtn(first.height(), length); // dense
+        Matrix* rtn = first.instantiate(first.height(), length); // dense
 		for (unsigned i = 0; i < first.height(); ++i) {
-			value_type a = first(i, 0);
+            value_type a = first(i, 0);
 			value_type b = third(i, 0);
 			value_type step = (b - a) / value_type(length - 1);
 			for (unsigned j = 0; j < length; ++j) {
-				rtn(i, j) = a;
+                (*rtn)(i, j) = a;
 				a += step;
 			}
 		}
@@ -64,12 +64,12 @@ namespace logic {
 		unsigned rows = pos.height();
 		unsigned cols = pos.width();
 		
-        Matrix rtn(rows, cols);
-        rtn.set_string(value.is_string());
+        Matrix* rtn = value.instantiate(rows, cols);
+        rtn->set_string(value.is_string());
 
 		for (unsigned y = 0; y < rows; ++y) {
 			for (unsigned x = 0; x < cols; ++x) {
-                rtn(y, x) = value[(unsigned)pos(y, x)];
+                (*rtn)(y, x) = value[(unsigned)pos(y, x)];
 			}
 		}
 		
@@ -85,13 +85,13 @@ namespace logic {
 		unsigned rows = row.length();
 		unsigned cols = col.length();
 		
-        Matrix rtn;
+        Matrix* rtn = value.instantiate(rows, cols);
 		
-        rtn.set_string(value.is_string());
+        rtn->set_string(value.is_string());
 		
 		for (unsigned y = 0; y < rows; ++y) {
 			for (unsigned x = 0; x < cols; ++x) {
-                rtn(y, x) = value((unsigned)row[y], (unsigned)col[x]);
+                (*rtn)(y, x) = value((unsigned)row[y], (unsigned)col[x]);
 			}
 		}
 		

@@ -15,7 +15,7 @@ struct build_node {
 	
 	~build_node()
 	{
-		delete next_node, val;
+        delete next_node; delete val;
 	}
 };
 
@@ -29,14 +29,14 @@ public:
 	typedef build_node<matrix_node> row_node;
 	typedef util::info_auto_ptr<super_type, util::string> return_type;
 	
-	build_proxy(return_type top)
+    build_proxy(return_type& top)
 	{
 		is_string = top->is_string();
 		rows = top->height();
 		current_cols = cols = top->width();
 		current_row = first = new row_node;
 		current_matrix = first->val;
-		current_matrix->val = top.release();;
+        current_matrix->val = top.release();
 		current_matrix->next_node = NULL;
 		first->next_node = NULL;
 		first_row = true;

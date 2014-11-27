@@ -12,9 +12,9 @@ namespace util {
 		
 		self* next_node;
 		key_type key;
-		value_type val;
+        value_type* val;
 		
-		map_node(key_type& nkey, value_type& nval) : key(nkey), val(nval),
+        map_node(key_type& nkey, value_type* nval) : key(nkey), val(nval),
 													 next_node(NULL) {}
 		
 		~map_node()
@@ -33,7 +33,7 @@ namespace util {
 		typedef Value value_type;
 		typedef map_node<Key, Value> node_type;
 		
-		bool insert(key_type& key, value_type& val) {
+        bool insert(key_type& key, value_type* val) {
 			unsigned pos = key.hash_code();
 			pos %= capacity;
 			node_type* current = vals[pos];
@@ -56,21 +56,21 @@ namespace util {
 			}
 		}
 		
-		value_type operator[] (const key_type& key) const
+        value_type* operator[] (const key_type& key) const
 		{
 			unsigned pos = key.hash_code();
 			pos %= capacity;
 			node_type* current = vals[pos];
 			while (current != NULL) {
 				if (current->key == key) {
-					return current->val.clone();
+                    return current->val; // ->clone()
 				}
 				current = current->next_node;
 			}			
-			return value_type();
+            return NULL;
 		}
 		
-		value_type pull(const key_type& key)
+        value_type* pull(const key_type& key)
 		{
 			unsigned pos = key.hash_code();
 			pos %= capacity;
@@ -78,7 +78,7 @@ namespace util {
 			node_type* current = vals[pos];
 			while (current != NULL) {
 				if (current->key == key) {
-					value_type rtn = current->val;
+                    value_type* rtn = current->val;
                     previous->next_node = current->next_node;
                     current->next_node = NULL;
 					delete current;
@@ -88,10 +88,10 @@ namespace util {
 				previous = current;
 				current = current->next_node;
 			}			
-			return value_type();
+            return NULL;
 		}
 		
-		value_type* get_pointer(const key_type& key)
+        /*value_type* get_pointer(const key_type& key)
 		{
 			unsigned pos = key.hash_code();
 			pos %= capacity;
@@ -103,7 +103,7 @@ namespace util {
 				current = current->next_node;
 			}			
 			return NULL;
-		}
+        }*/
 		
 		unsigned size() { return length; }
 		

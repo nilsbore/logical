@@ -15,7 +15,7 @@
 using namespace logic;
 
 template <typename Value, typename OutStream>
-class base_evaluator {
+class base_evaluator {    
 protected:
 	
 	typedef OutStream out_stream;
@@ -27,7 +27,12 @@ protected:
 	typedef string_matrix<value_type> string_type;
 	typedef expression<typename util::get_base_type<value_type>::type> expression_type;
 	typedef build_proxy<dense_type> build_type;
-	typedef util::info_auto_ptr<matrix_type, util::string> return_type;
+
+public:
+
+    typedef util::info_auto_ptr<matrix_type, util::string> return_type;
+
+protected:
 	
 	return_type get_scalar()
 	{

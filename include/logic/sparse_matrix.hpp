@@ -347,6 +347,16 @@ namespace logic {
 		unsigned end_row() const { return cols; }
 		unsigned end_col() const { return rows; }
 		
+        super* instantiate(size_t rows, size_t cols) const
+        {
+            return new sparse_matrix(rows, cols);
+        }
+
+        super* clone() const
+        {
+            return new sparse_matrix(*this);
+        }
+
 		sparse_matrix(const self& other) : super(super::SPARSE),
 										   rows(other.rows), cols(other.cols)
 		{

@@ -164,6 +164,7 @@ namespace logic {
 			return height();
 		}
         bool is_empty() const { return height() == 0 || width() == 0; }
+        operator bool() const { return (*this)(0, 0) != value_type(0); }
 		
         virtual self& operator+= (const self&) { return *this; }
         virtual self& operator*= (const self&) { return *this; }
@@ -220,7 +221,8 @@ namespace logic {
 		unsigned end_row() const { return width(); }
 		unsigned end_col() const { return height(); }
 		
-        virtual self* clone() const { return new self(type); }
+        virtual self* clone() const { return new self(NONE); }
+        virtual self* instantiate(size_t rows, size_t cols) const { return new self(NONE); }
 		virtual_matrix(matrix_type type) : type(type) {}
         virtual_matrix() : type(NONE) {}
 		virtual ~virtual_matrix() {}

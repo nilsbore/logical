@@ -98,7 +98,7 @@ namespace util {
 		{
 			matrix_type* rtn = matrix;
 			matrix = NULL;
-			delete message;
+            delete message;
 			message = NULL;
 			type = NOT_INIT;
 			return rtn;
@@ -109,7 +109,7 @@ namespace util {
 			if (matrix == other.matrix) {
 				return;
 			}
-			delete matrix, message;
+            delete matrix; delete message;
 			matrix = other.matrix;
 			message = other.message;
 			type = other.type;
@@ -145,7 +145,7 @@ namespace util {
 			other.type = NOT_INIT;
 		}
 		
-		~info_auto_ptr() { delete matrix, message; }
+        ~info_auto_ptr() { delete matrix; delete message; }
 		
 	private:
 		

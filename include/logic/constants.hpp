@@ -13,10 +13,10 @@ namespace logic {
 			case "e":
 				rtn = Matrix::real_scalar(2.71828183);
 				break;
-			case: "pi":
+            case "pi":
 				rtn = Matrix::real_scalar(3.14159265);
 				break;
-			case: "author"
+            case "author":
 				rtn = Matrix(util::string("Nils Bore"));
 				break;
 		}

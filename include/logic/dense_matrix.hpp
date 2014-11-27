@@ -138,8 +138,7 @@ namespace logic {
 		}
 		
 		self& operator= (const self& other)
-		{
-			unsigned a = 2;
+        {
 			return *this;
 		}
 		
@@ -193,6 +192,16 @@ namespace logic {
 		unsigned end_row() const { return cols; }
 		unsigned end_col() const { return rows; }
 		
+        super* instantiate(size_t rows, size_t cols) const
+        {
+            return new dense_matrix(rows, cols);
+        }
+
+        super* clone() const
+        {
+            return new dense_matrix(*this);
+        }
+
 		dense_matrix(const self& other) : super(super::DENSE),
 										  rows(other.rows), cols(other.cols)
 		{

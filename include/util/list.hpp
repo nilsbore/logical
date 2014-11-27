@@ -13,7 +13,7 @@ namespace util {
 		struct node {
 			
 			node(value_type* value) : value(value), next(NULL) {}
-			~node() { delete next, value; }
+            ~node() { delete next; delete value; }
 			
 			node* next;
 			node* previous;

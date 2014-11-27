@@ -156,6 +156,16 @@ namespace logic {
 			return col_iterator<const self>(*this, 0);
 		}
 		
+        super* instantiate(size_t rows, size_t cols) const
+        {
+            // add an assert here
+            return new scalar(0);
+        }
+
+        super* clone() const
+        {
+            return new scalar(*this);
+        }
 		scalar(const self& other) : super(super::SCALAR), val(other.val) {}
 		scalar(value_type val) : super(super::SCALAR), val(val) {}
 		

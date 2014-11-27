@@ -16,12 +16,17 @@ protected:
 	typedef Value value_type;
 	typedef OutStream out_stream;
 	typedef	base_evaluator<Value, OutStream> base;
-	typedef typename base::matrix_type matrix_type;
-	typedef typename base::return_type return_type;
+    typedef typename base::matrix_type matrix_type;
     typedef typename base::dense_type dense_type;
     typedef typename base::sparse_type sparse_type;
     typedef typename base::scalar_type scalar_type;
-    typedef util::map<util::string, matrix_type*> var_map;
+    typedef util::map<util::string, matrix_type> var_map;
+
+public:
+
+    typedef typename base::return_type return_type;
+
+protected:
 
 	return_type name(const util::string& arg)
 	{
@@ -31,7 +36,7 @@ protected:
 		}
         matrix_type* rtn = variables[arg];
         if (rtn->is_empty()) return "Variable not found.";
-        return rtn;
+        return rtn->clone();
 	}
 	
 	virtual void add_to_namespace(util::string& varname) {}
@@ -50,7 +55,7 @@ protected:
 		base::input++;
 		return_type value = base::build_matrix(';', ';', true);
 		if (!value.valid()) return value;
-        matrix_type varvalue = (*value).clone();
+        matrix_type* varvalue = value->clone();
         util::string temp = varname;
 		if (variables.insert(temp, varvalue)) {
 			add_to_namespace(varname);
@@ -114,9 +119,8 @@ public:
 		else {
 			rtn = base::build_matrix(';', ';', true);
 			if (rtn.valid()) {
-				util::string ans("ans");
-                matrix_type temp = rtn->clone();
-				variables.insert(ans, temp);
+                util::string ans("ans");
+                variables.insert(ans, rtn->clone());
 			}
 		}		
 		if (!rtn.valid()) {
