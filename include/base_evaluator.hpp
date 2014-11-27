@@ -223,6 +223,7 @@ protected:
 								int level, char stop1, char stop2)
 	{
 		// ändra för att ta return_type som argument istället
+
 		return_type rtn;
 		switch (symbol) {
 			case '+':
@@ -244,7 +245,7 @@ protected:
 				break;
 			default:
 				rtn = "Couldn't find operator.";
-		}
+        }
 		return rtn;
 	}
 	
@@ -307,16 +308,16 @@ protected:
 				char symbol = *input;
 				input++;
 				input.next_blanks();
-				return_type tmp = priority_level(level - 1, stop1, stop2);
+                return_type tmp = priority_level(level - 1, stop1, stop2);
 				if (!tmp.valid()) return tmp;
-				rtn = invoke_operator(symbol, rtn, tmp, level, stop1, stop2);
+                rtn = invoke_operator(symbol, rtn, tmp, level, stop1, stop2);
 				if (!rtn.valid()) return rtn;
 			}
 			else {
 				return "Couldn't identify operator.";
 			}
 			
-		}
+        }
 
 		return rtn;
 	}
@@ -329,7 +330,7 @@ public:
 		return_type rtn = build_matrix(';', ';', true);
 		
 		if (!rtn.valid()) {
-			for (unsigned i = 0; i < input.get_pos(); ++i) {
+            for (unsigned i = 0; i < 3+input.get_pos(); ++i) {
 				output << ' ';
 			}
 			output << "^\nCommand couldn't be evaluated. Terminated with error message:\n" 

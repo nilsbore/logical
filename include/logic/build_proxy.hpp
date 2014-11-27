@@ -13,6 +13,7 @@ struct build_node {
 	self* next_node;
 	value_type* val;
 	
+    build_node() : next_node(NULL), val(new value_type()) {}
 	~build_node()
 	{
         delete next_node; delete val;
@@ -34,8 +35,8 @@ public:
 		is_string = top->is_string();
 		rows = top->height();
 		current_cols = cols = top->width();
-		current_row = first = new row_node;
-		current_matrix = first->val;
+        current_row = first = new row_node;
+        current_matrix = first->val;
         current_matrix->val = top.release();
 		current_matrix->next_node = NULL;
 		first->next_node = NULL;
