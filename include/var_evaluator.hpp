@@ -35,7 +35,7 @@ protected:
 			return temp;
 		}
         matrix_type* rtn = variables[arg];
-        if (rtn->is_empty()) return "Variable not found.";
+        if (rtn == NULL) return "Variable not found.";
         return rtn->clone();
 	}
 	

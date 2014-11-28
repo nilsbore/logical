@@ -23,8 +23,8 @@ protected:
 	typedef virtual_matrix<value_type> matrix_type;
     typedef typename matrix_type::dense_type dense_type;
     typedef typename matrix_type::sparse_type sparse_type;
+    typedef typename matrix_type::string_type string_type;
 	typedef scalar<value_type> scalar_type;
-	typedef string_matrix<value_type> string_type;
 	typedef expression<typename util::get_base_type<value_type>::type> expression_type;
 	typedef build_proxy<dense_type> build_type;
 
@@ -180,7 +180,7 @@ protected:
 				input.next_blanks();
 				temp = priority_level(operator_priorities::nbr_of_levels - 1, stop1, stop2);
 				if (!temp.valid()) return temp;
-				if(!rtn.add_to_bottom(temp)) return "Matrix widths don't agree.";
+                if(!rtn.add_to_bottom(temp)) return "Matrix widths don't agree.";
 			}
 			else if (*input == stop1 || *input == stop2) {
 				break;
@@ -235,6 +235,9 @@ protected:
 			case '*':
 				rtn = first * second;
 				break;
+            case '/':
+                rtn = first / second;
+                break;
 			/*case '^':
 				if (!second.is_scalar()) return "Exponent has to be scalar.";
 				first = first ^ second;
@@ -327,7 +330,7 @@ public:
 	return_type evaluate(const char* arg, int length)
 	{
 		input.new_expression(arg, length);
-		return_type rtn = build_matrix(';', ';', true);
+        return_type rtn = build_matrix(';', ';', true);
 		
 		if (!rtn.valid()) {
             for (unsigned i = 0; i < 3+input.get_pos(); ++i) {

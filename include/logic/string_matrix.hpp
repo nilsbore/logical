@@ -26,5 +26,15 @@ namespace logic {
 		}
 	};
 
+    template <typename OutStream, typename Value>
+    OutStream& operator<< (OutStream& s, const string_matrix<Value>& m)
+    {
+        for (unsigned y = 0; y < m.height(); ++y) {
+            for (unsigned x = 0; x < m.width(); ++x) {
+                s << char(m(y, x)) << ' ';
+            }
+            s << '\n';
+        }
+    }
 } // namespace logic
 #endif

@@ -103,8 +103,9 @@ namespace util {
 			type = NOT_INIT;
 			return rtn;
 		}
-		
-		void operator= (const self& other)
+
+        // can be const since same class
+        void operator= (const self& other)
 		{
 			if (matrix == other.matrix) {
 				return;
@@ -117,6 +118,20 @@ namespace util {
 			other.message = NULL;
 			other.type = NOT_INIT;
 		}
+
+        void operator= (self&& other)
+        {
+            if (matrix == other.matrix) {
+                return;
+            }
+            delete matrix; delete message;
+            matrix = other.matrix;
+            message = other.message;
+            type = other.type;
+            other.matrix = NULL;
+            other.message = NULL;
+            other.type = NOT_INIT;
+        }
 		
 		message_type get_info() const
 		{
@@ -144,6 +159,15 @@ namespace util {
 			other.message = NULL;
 			other.type = NOT_INIT;
 		}
+        info_auto_ptr(self&& other)
+        {
+            matrix = other.matrix;
+            message = other.message;
+            type = other.type;
+            other.matrix = NULL;
+            other.message = NULL;
+            other.type = NOT_INIT;
+        }
 		
         ~info_auto_ptr() { delete matrix; delete message; }
 		

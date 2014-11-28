@@ -9,6 +9,7 @@ namespace logic {
 	template <typename Value> class virtual_matrix;
 	template <typename Value> class sparse_matrix;
 	template <typename Value> class dense_matrix;
+    template <typename Value> class string_matrix;
 	template <typename Value> class scalar;
 
 	template <typename Value, bool IsConst = false>

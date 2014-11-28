@@ -6,7 +6,7 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    var_evaluator<double, ostream> eval(cout);
+    base_evaluator<double, ostream> eval(cout);
     typedef base_evaluator<double, ostream>::return_type return_type;
     std::string s;
     do {

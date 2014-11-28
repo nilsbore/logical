@@ -13,7 +13,7 @@ namespace logic {
 		
 		static const unsigned level0_operators = 1;
 		static const unsigned level1_operators = 1;
-		static const unsigned level2_operators = 1;
+        static const unsigned level2_operators = 1;//2;
 		static const unsigned level3_operators = 2;
 		static const unsigned level4_operators = 1;
 
@@ -72,7 +72,7 @@ namespace logic {
 	
 	const char operator_priorities::level0[] = {'\''};
 	const char operator_priorities::level1[] = {'^'};
-	const char operator_priorities::level2[] = {'*'};
+    const char operator_priorities::level2[] = {'*'};//, '/'};
 	const char operator_priorities::level3[] = {'+', '-'};
 	const char operator_priorities::level4[] = {':'};
 	

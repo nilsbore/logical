@@ -6,9 +6,6 @@
 
 namespace logic {
 	
-	//template <typename Value> class dense_matrix;
-	//template <typename Value> class sparse_matrix;
-	
 	template<typename Matrix>
 	class row_iterator {
 	public:
@@ -145,6 +142,7 @@ namespace logic {
 		typedef dense_matrix<value_type> dense_type;
 		typedef sparse_matrix<value_type> sparse_type;
 		typedef scalar<value_type> scalar_type;
+        typedef string_matrix<value_type> string_type;
 		
         enum matrix_type {DENSE, SPARSE, SCALAR, STRING, NONE} type;
 
@@ -232,9 +230,13 @@ namespace logic {
 	OutStream& operator<< (OutStream& s, const virtual_matrix<Value>& m)
 	{
 		typedef virtual_matrix<Value> matrix;
-		/*if (m.type() == matrix::STRING) {
-			m = reinterpret_cast<string<Value> > (m);
-		}*/
+        typedef typename matrix::string_type string_type;
+        if (m.get_type() == matrix::STRING) {
+            s << static_cast<const string_type&>(m);
+            s << "STRING" << '\n';
+            return s;
+        }
+        s << "NOT STRING" << '\n';
 		for (unsigned y = 0; y < m.height(); ++y) {
 			for (unsigned x = 0; x < m.width(); ++x) {
 				s << m(y, x) << ' ';
