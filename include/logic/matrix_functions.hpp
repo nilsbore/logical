@@ -12,6 +12,8 @@ namespace logic {
 	util::info_auto_ptr<Matrix, util::string> linspace(const Matrix& first,
 													   const Matrix& second)
 	{
+        typedef typename Matrix::dense_type dense_type;
+
         if (!first.is_scalar() || !second.is_scalar()) return "Linspace boundaries are not scalar.";
 		
 		int a = first(0, 0);
@@ -20,7 +22,7 @@ namespace logic {
 		unsigned length = abs(b - a) + 1;
 		int step = b > a? 1 : -1;
 		
-        Matrix* rtn = first.instantiate(1, length);
+        Matrix* rtn = new dense_type(1, length);
 		for (unsigned i = 0; i < length; i++) {
             (*rtn)(0, i) = a;
 			a += step;
@@ -35,6 +37,7 @@ namespace logic {
 													   const Matrix& third)
 	{
 		typedef typename Matrix::value_type value_type;
+        typedef typename Matrix::dense_type dense_type;
 		
         if (!second.is_scalar()) return "Linspace step is not scalar.";
         if (first.width() != 1 || third.width() != 1) return "Linspace boundaries are not column vectors.";
@@ -42,7 +45,7 @@ namespace logic {
 		
 		unsigned length = second(0, 0);
 		
-        Matrix* rtn = first.instantiate(first.height(), length); // dense
+        Matrix* rtn = new dense_type(first.height(), length); // dense
 		for (unsigned i = 0; i < first.height(); ++i) {
             value_type a = first(i, 0);
 			value_type b = third(i, 0);

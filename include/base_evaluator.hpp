@@ -21,8 +21,8 @@ protected:
 	typedef OutStream out_stream;
 	typedef Value value_type;
 	typedef virtual_matrix<value_type> matrix_type;
-	typedef dense_matrix<value_type> dense_type;
-	typedef sparse_matrix<value_type> sparse_type;
+    typedef typename matrix_type::dense_type dense_type;
+    typedef typename matrix_type::sparse_type sparse_type;
 	typedef scalar<value_type> scalar_type;
 	typedef string_matrix<value_type> string_type;
 	typedef expression<typename util::get_base_type<value_type>::type> expression_type;
