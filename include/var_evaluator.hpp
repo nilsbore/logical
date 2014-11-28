@@ -124,7 +124,7 @@ public:
 			}
 		}		
 		if (!rtn.valid()) {
-			for (unsigned i = 0; i < base::input.get_pos(); ++i) {
+            for (unsigned i = 0; i < 3+base::input.get_pos(); ++i) {
 				base::output << ' ';
 			}
 			base::output << "^\nCommand couldn't be evaluated. Terminated with error message:\n" 

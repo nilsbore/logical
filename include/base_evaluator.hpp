@@ -175,7 +175,7 @@ protected:
 		build_type rtn(temp);
 		while (true) {
 			input.next_blanks();
-			if (*input == '\\') {
+            if (*input == '\\') {
 				input++;
 				input.next_blanks();
 				temp = priority_level(operator_priorities::nbr_of_levels - 1, stop1, stop2);

@@ -11,8 +11,10 @@ int main(int argc, char** argv)
     std::string s;
     do {
         std::cout << ">> ";
-        std::cin >> s;
-        //s = std::string("4+4");
+        //std::cin >> std::noskipws >> s;
+        std::getline(std::cin, s);
+        //std::cout << s << std::endl;
+        //s = std::string("1 2 3 \\ 4 5 6");
         return_type rtn = eval.evaluate(s.c_str(), s.size());
     }
     while (s != "quit");

@@ -41,7 +41,7 @@ public:
         current_matrix->val = top.release();
 		current_matrix->next_node = NULL;
 		first->next_node = NULL;
-		first_row = true;
+        first_row = true;
 	}
 	
 	~build_proxy()
@@ -141,9 +141,9 @@ public:
 		rows += bottom->height();
 		first_row = false;
 		current_row->next_node = new row_node;
-        current_row->val = new matrix_node;
 		current_row = current_row->next_node;
 		current_row->next_node = NULL;
+        current_row->val = new matrix_node;
 		current_matrix = current_row->val;
 		current_matrix->val = bottom.release();
 		current_matrix->next_node = NULL;
