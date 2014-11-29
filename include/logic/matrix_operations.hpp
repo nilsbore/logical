@@ -43,6 +43,16 @@ namespace logic {
 		}
 		
 	};
+
+    template<typename Value>
+    struct Assign {
+
+        void operator() (Value& first, const Value& second)
+        {
+            first += second;
+        }
+
+    };
 	
 	template<typename Iter>
 	struct add_scalar {
@@ -362,7 +372,7 @@ namespace logic {
 	template <typename Matrix1, typename Matrix2>
 	void assign_rows(Matrix1& first, const Matrix2& second)
 	{
-		
+        for_each_row<Assign<typename Matrix1::value_type> >(first, second);
 	}
 	
 	template<typename Iter1, typename Iter2>

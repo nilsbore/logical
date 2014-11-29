@@ -16,6 +16,7 @@ namespace logic {
 		
 		typedef virtual_matrix<Value> super;
 		typedef Value value_type;
+        typedef typename super::dense_type dense_type;
 		
 		unsigned height() const { return 1; }
 		unsigned width() const { return 1; }
@@ -158,8 +159,7 @@ namespace logic {
 		
         super* instantiate(size_t rows, size_t cols) const
         {
-            // add an assert here
-            return new scalar(0);
+            return new dense_type(rows, cols);
         }
 
         super* clone() const

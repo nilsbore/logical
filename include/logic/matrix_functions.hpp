@@ -59,6 +59,7 @@ namespace logic {
 		return rtn;
 	}
 	
+    // TODO: Use iterators or recursators for this instead
 	template<typename Matrix>
 	util::info_auto_ptr<Matrix, util::string> index(const Matrix& value, const Matrix& pos)
 	{
@@ -79,6 +80,7 @@ namespace logic {
 		return rtn;
 	}
 	
+    // TODO: Use iterators or recursators for this instead
 	template<typename Matrix>
 	util::info_auto_ptr<Matrix, util::string> index(const Matrix& value, const Matrix& row,
 													const Matrix& col)
@@ -101,6 +103,7 @@ namespace logic {
 		return rtn;
 	}
 	
+    // TODO: Use iterators or recursators for this instead
 	template<typename Matrix>
 	bool assign_index(Matrix& var, const Matrix& pos, const Matrix& value)
 	{
@@ -124,6 +127,7 @@ namespace logic {
 		return true;
 	}
 	
+    // TODO: Use iterators or recursators for this instead
 	template<typename Matrix>
 	bool assign_index(Matrix& var, const Matrix& row, const Matrix& col, const Matrix& value)
 	{

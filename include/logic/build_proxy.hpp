@@ -35,6 +35,7 @@ public:
 		rows = top->height();
 		current_cols = cols = top->width();
         current_row = first = new row_node;
+        current_row->next_node = NULL;
         first->val = new matrix_node;
         current_matrix = first->val;
         current_matrix->val = top.release();
@@ -48,7 +49,7 @@ public:
 		delete first;
 	}
 	
-	return_type build()
+    /*return_type build()
 	{
 		if (current_cols != cols) {
 			return "Last row doesn't agree with matrix dimensions.";
@@ -77,7 +78,43 @@ public:
 		}
 		// rtn->set_string(is_string); TODO: initialize as string(or sparse)
 		return return_type(rtn);
-	}
+    }*/
+
+    return_type build()
+    {
+        if (current_cols != cols) {
+            return "Last row doesn't agree with matrix dimensions.";
+        }
+        matrix_type* rtn = first->val->val->instantiate(rows, cols);
+        current_row = first;
+        current_matrix = first->val;
+        size_t current_i, current_j;
+        size_t width, height;
+
+        typedef typename matrix_type::recursator_type recursator_type;
+
+        current_j = 0;
+        while (current_row != NULL) {
+            current_i = 0;
+            while (current_matrix != NULL) {
+                width = current_matrix->val->width();
+                height = current_matrix->val->height();
+                recursator_type* recursator = rtn->new_recursator(current_j, current_j + height - 1,
+                                                                  current_i, current_i + width - 1);
+                *recursator = *current_matrix->val;
+                delete recursator;
+                recursator = NULL;
+                current_i += width;
+                current_matrix = current_matrix->next_node;
+            }
+            current_j += height;
+            current_row = current_row->next_node;
+            if (current_row != NULL) {
+                current_matrix = current_row->val;
+            }
+        }
+        return return_type(rtn);
+    }
 	
 	/*void print()
 	{

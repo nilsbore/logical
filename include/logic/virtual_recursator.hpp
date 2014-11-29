@@ -60,6 +60,7 @@ namespace logic {
 		virtual self& operator/= (const self&) = 0;
 		virtual virtual_matrix<value_type>* product(const self& other) const = 0;*/
 		
+        virtual self& operator= (const virtual_matrix<value_type>&) = 0;
 		virtual self& operator+= (const virtual_matrix<value_type>&) = 0;
 		virtual self& operator*= (const virtual_matrix<value_type>&) = 0;
 		virtual self& operator-= (const virtual_matrix<value_type>&) = 0;

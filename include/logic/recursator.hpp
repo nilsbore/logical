@@ -5,6 +5,8 @@
 #include "../util/convenience.hpp"
 #include "virtual_recursator.hpp"
 
+#include <iostream>
+
 namespace logic {
 
 	template <typename Matrix>
@@ -88,7 +90,7 @@ namespace logic {
 			return matrix_product(*this, other);
 		}*/
 		
-		// Operators for non-constant recursator
+        // Operators for non-constant recursator
 		super& operator+= (const virtual_recursator<value_type, false>& other)
 		{
 			add_rows(*this, other);
@@ -149,6 +151,12 @@ namespace logic {
 		}
 		
 		// Operators for matrices
+        super& operator= (const virtual_matrix<value_type>& other)
+        {
+            assign_rows(*this, other);
+            return *this;
+        }
+
 		super& operator+= (const virtual_matrix<value_type>& other)
 		{
 			add_rows(*this, other);
@@ -218,22 +226,24 @@ namespace logic {
 	
 	template <typename Matrix>
 	class row_iterator<recursator<Matrix> > : public row_iterator<Matrix> {
-	private:
-		typedef row_iterator<Matrix> super;
-		unsigned firstcol;
-		typedef row_iterator self;
-	public:
-		typedef recursator<Matrix> matrix_type;
-		template <typename Iterator>
-		void set(const Iterator& other) { super::explicit_set(firstcol + other.pos()); }
+    protected:
+
+        typedef row_iterator<Matrix> super;
+        typedef typename super::base base;
+        typedef typename base::base_const base_const;
+        typedef typename base::base_mut base_mut;
+        typedef row_iterator self;
+        unsigned firstcol;
+
+    public:
+
+        typedef recursator<Matrix> matrix_type;
+
+        void set(const base_const& other) { super::explicit_set(firstcol + other.pos()); }
+        void set(const base_mut& other) { super::explicit_set(firstcol + other.pos()); }
 		void explicit_set(unsigned i) { super::explicit_set(firstcol + i); }
 		unsigned pos() const { return super::pos() - firstcol; }
 		bool operator!= (unsigned end) const { return super::operator!=(firstcol + end); }
-		self& operator++ ()
-		{
-			super::operator++();
-			return *this;
-		}
 		row_iterator(const super& other, unsigned firstcol) : super(other),
 			firstcol(firstcol)
 		{
@@ -245,22 +255,24 @@ namespace logic {
 	
 	template <typename Matrix> // TODO: subclass row_iterator<recursator> instead
 	class row_iterator<const recursator<Matrix> > : public row_iterator<Matrix> {
-	private:
-		typedef row_iterator<Matrix> super;
-		unsigned firstcol;
-		typedef row_iterator self;
-	public:
-		typedef const recursator<Matrix> matrix_type;
-		template <typename Iterator>
-		void set(const Iterator& other) { super::explicit_set(firstcol + other.pos()); }
+    protected:
+
+        typedef row_iterator<Matrix> super;
+        typedef typename super::base base;
+        typedef typename base::base_const base_const;
+        typedef typename base::base_mut base_mut;
+        typedef row_iterator self;
+        unsigned firstcol;
+
+    public:
+
+        typedef const recursator<Matrix> matrix_type;
+
+        void set(const base_const& other) { super::explicit_set(firstcol + other.pos()); }
+        void set(const base_mut& other) { super::explicit_set(firstcol + other.pos()); }
 		void explicit_set(unsigned i) { super::explicit_set(firstcol + i); }
 		unsigned pos() const { return super::pos() - firstcol; }
 		bool operator!= (unsigned end) const { return super::operator!=(firstcol + end); }
-		self& operator++ ()
-		{
-			super::operator++();
-			return *this;
-		}
 		row_iterator(const super& other, unsigned firstcol) : super(other),
 		firstcol(firstcol)
 		{
@@ -272,22 +284,24 @@ namespace logic {
 	
 	template <typename Matrix>
 	class col_iterator<recursator<Matrix> > : public col_iterator<Matrix> {
-	private:
-		typedef col_iterator<Matrix> super;
-		unsigned firstrow;
+    protected:
+
+        typedef col_iterator<Matrix> super;
+        typedef typename super::base base;
+        typedef typename base::base_const base_const;
+        typedef typename base::base_mut base_mut;
 		typedef col_iterator self;
+        unsigned firstrow;
+
 	public:
-		typedef recursator<Matrix> matrix_type;
-		template <typename Iterator>
-		void set(const Iterator& other) { super::explicit_set(firstrow + other.pos()); }
+
+        typedef recursator<Matrix> matrix_type;
+
+        void set(const base_const& other) { super::explicit_set(firstrow + other.pos()); }
+        void set(const base_mut& other) { super::explicit_set(firstrow + other.pos()); }
 		void explicit_set(unsigned i) { super::explicit_set(firstrow + i); }
 		unsigned pos() const { return super::pos() - firstrow; }
 		bool operator!= (unsigned end) const { return super::operator!=(firstrow + end); }
-		self& operator++ ()
-		{
-			super::operator++();
-			return *this;
-		}
 		col_iterator(const super& other, unsigned firstrow) : super(other),
 			firstrow(firstrow)
 		{
@@ -299,22 +313,24 @@ namespace logic {
 	
 	template <typename Matrix> // TODO: subclass col_iterator<recursator> instead
 	class col_iterator<const recursator<Matrix> > : public col_iterator<Matrix> {
-	private:
-		typedef col_iterator<Matrix> super;
-		unsigned firstrow;
-		typedef col_iterator self;
-	public:
-		typedef const recursator<Matrix> matrix_type;
-		template <typename Iterator>
-		void set(const Iterator& other) { super::explicit_set(firstrow + other.pos()); }
+    protected:
+
+        typedef col_iterator<Matrix> super;
+        typedef typename super::base base;
+        typedef typename base::base_const base_const;
+        typedef typename base::base_mut base_mut;
+        typedef col_iterator self;
+        unsigned firstrow;
+
+    public:
+
+        typedef const recursator<Matrix> matrix_type;
+
+        void set(const base_const& other) { super::explicit_set(firstrow + other.pos()); }
+        void set(const base_mut& other) { super::explicit_set(firstrow + other.pos()); }
 		void explicit_set(unsigned i) { super::explicit_set(firstrow + i); }
 		unsigned pos() const { return super::pos() - firstrow; }
 		bool operator!= (unsigned end) const { return super::operator!=(firstrow + end); }
-		self& operator++ ()
-		{
-			super::operator++();
-			return *this;
-		}
 		col_iterator(const super& other, unsigned firstrow) : super(other),
 		firstrow(firstrow)
 		{

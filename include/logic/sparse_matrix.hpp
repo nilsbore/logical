@@ -424,7 +424,7 @@ namespace logic {
 	Value sparse_matrix<Value>::zero = Value(0);
 	
 	template<typename Sparse>
-	class sparse_row_iterator {
+    class sparse_row_iterator : public virtual_iterator<typename Sparse::value_type, util::is_const<Sparse>::value> {
 	public:
 		
 		typedef Sparse matrix_type;
@@ -433,6 +433,10 @@ namespace logic {
 	protected:
 		
 		typedef sparse_row_iterator self;
+        typedef virtual_iterator<value_type, util::is_const<Sparse>::value> base;
+        typedef typename base::base_const base_const;
+        typedef typename base::base_mut base_mut;
+        typedef typename base::access_type access_type;
 		typedef typename util::if_<util::is_const<Sparse>,
 		const Sparse&, Sparse&>::type ref_type;
 		typedef typename Sparse::node node;
@@ -485,26 +489,34 @@ namespace logic {
 			is_zero = true;
 		}
 		
-		template <typename Iterator>
-		void set(const Iterator& other) { explicit_set(other.pos()); }
+        void set(const base_const& other) { explicit_set(other.pos()); }
+        void set(const base_mut& other) { explicit_set(other.pos()); }
 		
+        access_type operator* () {
+            if (is_zero) {
+                return val.zero;
+            }
+            return current->val;
+        }
+
 		const value_type& operator* () const {
 			if (is_zero) {
 				return val.zero;
 			}
 			return current->val;
 		}
-		
-		void next ()
-		{
-			if (current != NULL) {
-				current = current->right;
-			}
-			else if (is_zero) {
-				current = val.row_vals[row];
-			}
-			is_zero = false;
-		}
+
+        base& operator++ ()
+        {
+            if (current != NULL) {
+                current = current->right;
+            }
+            else if (is_zero) {
+                current = val.row_vals[row];
+            }
+            is_zero = false;
+            return *this;
+        }
 		
 		bool operator!= (unsigned end) const { 
 			return (is_zero && x < end) || (current != NULL && current->x < end);
@@ -528,21 +540,16 @@ namespace logic {
 		
 		typedef Value value_type;
 		
-	private:
+    protected:
 		
 		typedef row_iterator self;
 		typedef sparse_row_iterator<sparse_matrix<Value> > super;
+        typedef typename super::base base;
 		typedef typename super::ref_type ref_type;
-		typedef value_type& access_type;
+        typedef typename super::access_type access_type;
 		typedef typename super::node node;
 		
 	public:
-		
-		self& operator++ ()
-		{
-			super::next();
-			return *this;
-		}
 		
 		access_type operator* () {
 			if (super::is_zero) {
@@ -577,37 +584,37 @@ namespace logic {
 		
 		typedef Value value_type;
 		
-	private:
+    protected:
 		
 		typedef row_iterator self;
 		typedef sparse_row_iterator<const sparse_matrix<Value> > super;
+        typedef typename super::base base;
 		typedef typename super::ref_type ref_type;
 		
 	public:
-		
-		self& operator++ ()
-		{
-			super::next();
-			return *this;
-		}
 		
 		row_iterator(ref_type val, unsigned row) : super(val, row) {}
 		row_iterator(const self& other) : super(other) {}
 		
 	};
 	
-	template<typename Sparse>
-	class sparse_col_iterator {
-	public:
-		
-		typedef typename Sparse::value_type value_type;
-		
-	protected:
-		
-		typedef sparse_col_iterator self;
-		typedef typename util::if_<util::is_const<Sparse>,
-		const Sparse&, Sparse&>::type ref_type;
-		typedef typename Sparse::node node;
+    template<typename Sparse>
+    class sparse_col_iterator : public virtual_iterator<typename Sparse::value_type, util::is_const<Sparse>::value> {
+    public:
+
+        typedef Sparse matrix_type;
+        typedef typename Sparse::value_type value_type;
+
+    protected:
+
+        typedef sparse_col_iterator self;
+        typedef virtual_iterator<value_type, util::is_const<Sparse>::value> base;
+        typedef typename base::base_const base_const;
+        typedef typename base::base_mut base_mut;
+        typedef typename base::access_type access_type;
+        typedef typename util::if_<util::is_const<Sparse>,
+        const Sparse&, Sparse&>::type ref_type;
+        typedef typename Sparse::node node;
 		
 	public:
 		
@@ -656,11 +663,11 @@ namespace logic {
 			current = previous;
 			is_zero = true;
 		}
+
+        void set(const base_const& other) { explicit_set(other.pos()); }
+        void set(const base_mut& other) { explicit_set(other.pos()); }
 		
-		template <typename Iterator>
-		void set(const Iterator& other) { explicit_set(other.pos()); }
-		
-		void next ()
+        base& operator++ ()
 		{
 			if (current != NULL) {
 				current = current->down;
@@ -669,12 +676,21 @@ namespace logic {
 				current = val.col_vals[col];
 			}
 			is_zero = false;
+            return *this;
 		}
 		
 		bool operator!= (unsigned end) const {
 			return (is_zero && y < end) || (current != NULL && current->y < val.height());
 		}
 		
+        const access_type operator* ()
+        {
+            if (is_zero) {
+                return val.zero;
+            }
+            return current->val;
+        }
+
 		const value_type& operator* () const
 		{
 			if (is_zero) {
@@ -701,21 +717,16 @@ namespace logic {
 		
 		typedef Value value_type;
 		
-	private:
+    protected:
 		
 		typedef col_iterator self;
 		typedef sparse_col_iterator<sparse_matrix<Value> > super;
+        typedef typename super::base base;
 		typedef typename super::ref_type ref_type;
-		typedef value_type& access_type;
+        typedef typename super::access_type access_type;
 		typedef typename super::node node;
 		
 	public:
-		
-		self& operator++ ()
-		{
-			super::next();
-			return *this;
-		}
 		
 		access_type operator* () {
 			if (super::is_zero) {
@@ -750,19 +761,14 @@ namespace logic {
 		
 		typedef Value value_type;
 		
-	private:
+    protected:
 		
 		typedef col_iterator self;
 		typedef sparse_col_iterator<const sparse_matrix<Value> > super;
+        typedef typename super::base base;
 		typedef typename super::ref_type ref_type;
 		
 	public:
-		
-		self& operator++ ()
-		{
-			super::next();
-			return *this;
-		}
 		
 		col_iterator(ref_type val, unsigned col) : super(val, col) {}
 		col_iterator(const self& other) : super(other) {}
