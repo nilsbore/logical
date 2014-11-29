@@ -233,10 +233,8 @@ namespace logic {
         typedef typename matrix::string_type string_type;
         if (m.get_type() == matrix::STRING) {
             s << static_cast<const string_type&>(m);
-            s << "STRING" << '\n';
             return s;
         }
-        s << "NOT STRING" << '\n';
 		for (unsigned y = 0; y < m.height(); ++y) {
 			for (unsigned x = 0; x < m.width(); ++x) {
 				s << m(y, x) << ' ';

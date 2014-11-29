@@ -17,6 +17,11 @@ namespace logic {
 		typedef virtual_matrix<Value> super;
 		typedef Value value_type;
 		
+        super* instantiate(size_t rows, size_t cols) const
+        {
+            return new string_matrix(rows, cols);
+        }
+        string_matrix(size_t rows, size_t cols) : dense_matrix<value_type>(rows, cols, super::STRING) {}
 		string_matrix(const util::string& str) : dense_matrix<value_type>(1, str.length(),
 																		  super::STRING)
 		{

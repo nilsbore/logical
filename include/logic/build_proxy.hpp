@@ -24,11 +24,10 @@ template <typename Matrix>
 class build_proxy {
 public:
 	
-	typedef Matrix matrix_type;
-	typedef typename Matrix::super super_type;
-	typedef build_node<super_type> matrix_node;
+    typedef Matrix matrix_type;
+    typedef build_node<matrix_type> matrix_node;
 	typedef build_node<matrix_node> row_node;
-	typedef util::info_auto_ptr<super_type, util::string> return_type;
+    typedef util::info_auto_ptr<matrix_type, util::string> return_type;
 	
     build_proxy(return_type& top)
 	{
@@ -54,11 +53,12 @@ public:
 		if (current_cols != cols) {
 			return "Last row doesn't agree with matrix dimensions.";
 		}
-		matrix_type* rtn = new matrix_type(rows, cols);
+        matrix_type* rtn = first->val->val->instantiate(rows, cols);
 		current_row = first;
 		current_matrix = first->val;
 		unsigned current_i, current_j;
 		current_i = 0;
+        // change to use recursators instead
 		for (unsigned i = 0; i < rows; ++i, ++current_i) {
 			if (current_i >= current_matrix->val->height()) {
 				current_row = current_row->next_node;

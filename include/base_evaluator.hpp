@@ -26,7 +26,7 @@ protected:
     typedef typename matrix_type::string_type string_type;
 	typedef scalar<value_type> scalar_type;
 	typedef expression<typename util::get_base_type<value_type>::type> expression_type;
-	typedef build_proxy<dense_type> build_type;
+    typedef build_proxy<matrix_type> build_type;
 
 public:
 
