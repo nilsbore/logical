@@ -5,6 +5,20 @@
 
 namespace logic {
 	
+    // change to use the new std::function instead
+    /*template <typename Operator, typename Matrix1, typename Matrix2>
+    void cast_and_apply(Matrix1& first, Matrix2& second)
+    {
+        typedef typename Matrix2::dense_type second_dense_type;
+        typedef typename Matrix2::sparse_type second_sparse_type;
+        typedef	typename Matrix2::scalar_type second_scalar_type;
+
+        typedef typename Matrix2::dense_type first_dense_type;
+        typedef typename Matrix2::sparse_type first_sparse_type;
+        typedef	typename Matrix2::scalar_type first_scalar_type;
+
+    }*/
+
 	template<typename Iter1, typename Iter2>
 	struct assign {
 		typedef Iter1 iter_type1;
@@ -49,7 +63,7 @@ namespace logic {
 
         void operator() (Value& first, const Value& second)
         {
-            first += second;
+            first = second;
         }
 
     };
@@ -291,6 +305,7 @@ namespace logic {
 		}
 		
 	};*/
+
 	
 	template <typename Operator, typename Matrix1, typename Matrix2>
 	void for_each_row(Matrix1& first, Matrix2& second)
@@ -299,8 +314,10 @@ namespace logic {
 		typedef typename Matrix2::sparse_type sparse_type;
 		typedef	typename Matrix2::scalar_type scalar_type;
 		
+        // this casting business does not work for recursators
+        // yes it should, actually...
 		if (second.is_scalar()) { // kanske bara ta in värdet ist
-			const scalar_type& sc = static_cast<const scalar_type&> (second);
+            const scalar_type& sc = static_cast<const scalar_type&> (second);
 			Implementation<Operator, Matrix1, const scalar_type> imp;
 			for (unsigned y = 0; y < first.height(); ++y) {
 				imp(first.begin_row(y), sc.begin_row(y), first.end_row());

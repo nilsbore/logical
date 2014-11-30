@@ -12,8 +12,8 @@ int main(int argc, char** argv)
     do {
         std::cout << ">> ";
         //std::cin >> std::noskipws >> s;
-        //std::getline(std::cin, s);
-        s = std::string("1 2 3 4 5 \\ 6 7 8 9 10");
+        std::getline(std::cin, s);
+        //s = std::string("1 2 3 4 5 \\ 6 7 8 9 10");
         //std::cout << s << std::endl;
         //s = std::string("1 2 3 \\ 4 5 6");
         return_type rtn = eval.evaluate(s.c_str(), s.size());

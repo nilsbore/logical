@@ -5,8 +5,6 @@
 #include "../util/convenience.hpp"
 #include "virtual_recursator.hpp"
 
-#include <iostream>
-
 namespace logic {
 
 	template <typename Matrix>
@@ -15,6 +13,9 @@ namespace logic {
 		
 		typedef typename Matrix::value_type value_type;
 		typedef virtual_recursator<value_type, util::is_const<Matrix>::value> super;
+        typedef typename super::dense_type dense_type;
+        typedef typename super::dense_type sparse_type;
+        typedef typename super::dense_type scalar_type;
 		
 	private:
 		
@@ -188,25 +189,25 @@ namespace logic {
 						   
 		row_iterator<self> begin_row(unsigned row)
 		{
-			row_iterator<self> rtn(val.begin_row(firstrow+row), firstcol);
+            row_iterator<self> rtn(val.begin_row(firstrow+row), firstcol, lastcol);
 			return rtn;
 		}
 		
 		row_iterator<const self> begin_row(unsigned row) const
 		{
-			row_iterator<const self> rtn(val.begin_row(firstrow+row), firstcol);
+            row_iterator<const self> rtn(val.begin_row(firstrow+row), firstcol, lastcol);
 			return rtn;
 		}
 		
 		col_iterator<self> begin_col(unsigned col)
 		{
-			col_iterator<self> rtn(val.begin_col(firstcol+col), firstrow);
+            col_iterator<self> rtn(val.begin_col(firstcol+col), firstrow, lastrow);
 			return rtn;
 		}
 						   
 		col_iterator<const self> begin_col(unsigned col) const
 		{
-			col_iterator<const self> rtn(val.begin_col(firstcol+col), firstrow);
+            col_iterator<const self> rtn(val.begin_col(firstcol+col), firstrow, lastrow);
 			return rtn;
 		}
 						   
@@ -233,7 +234,7 @@ namespace logic {
         typedef typename base::base_const base_const;
         typedef typename base::base_mut base_mut;
         typedef row_iterator self;
-        unsigned firstcol;
+        unsigned firstcol, lastcol;
 
     public:
 
@@ -243,9 +244,10 @@ namespace logic {
         void set(const base_mut& other) { super::explicit_set(firstcol + other.pos()); }
 		void explicit_set(unsigned i) { super::explicit_set(firstcol + i); }
 		unsigned pos() const { return super::pos() - firstcol; }
-		bool operator!= (unsigned end) const { return super::operator!=(firstcol + end); }
-		row_iterator(const super& other, unsigned firstcol) : super(other),
-			firstcol(firstcol)
+        //bool operator!= (unsigned end) const { return super::operator!=(firstcol + end); }
+        bool operator!= (unsigned end) const { return end <= (lastcol - firstcol); }
+        row_iterator(const super& other, unsigned firstcol, unsigned lastcol) : super(other),
+            firstcol(firstcol), lastcol(lastcol)
 		{
 			while (super::pos() < firstcol) {
 				++(*this);
@@ -262,7 +264,7 @@ namespace logic {
         typedef typename base::base_const base_const;
         typedef typename base::base_mut base_mut;
         typedef row_iterator self;
-        unsigned firstcol;
+        unsigned firstcol, lastcol;
 
     public:
 
@@ -272,9 +274,10 @@ namespace logic {
         void set(const base_mut& other) { super::explicit_set(firstcol + other.pos()); }
 		void explicit_set(unsigned i) { super::explicit_set(firstcol + i); }
 		unsigned pos() const { return super::pos() - firstcol; }
-		bool operator!= (unsigned end) const { return super::operator!=(firstcol + end); }
-		row_iterator(const super& other, unsigned firstcol) : super(other),
-		firstcol(firstcol)
+        //bool operator!= (unsigned end) const { return super::operator!=(firstcol + end); }
+        bool operator!= (unsigned end) const { return end <= (lastcol - firstcol); }
+        row_iterator(const super& other, unsigned firstcol, unsigned lastcol) : super(other),
+        firstcol(firstcol), lastcol(lastcol)
 		{
 			while (super::pos() < firstcol) {
 				++(*this);
@@ -291,7 +294,7 @@ namespace logic {
         typedef typename base::base_const base_const;
         typedef typename base::base_mut base_mut;
 		typedef col_iterator self;
-        unsigned firstrow;
+        unsigned firstrow, lastrow;
 
 	public:
 
@@ -301,9 +304,10 @@ namespace logic {
         void set(const base_mut& other) { super::explicit_set(firstrow + other.pos()); }
 		void explicit_set(unsigned i) { super::explicit_set(firstrow + i); }
 		unsigned pos() const { return super::pos() - firstrow; }
-		bool operator!= (unsigned end) const { return super::operator!=(firstrow + end); }
-		col_iterator(const super& other, unsigned firstrow) : super(other),
-			firstrow(firstrow)
+        //bool operator!= (unsigned end) const { return super::operator!=(firstrow + end); }
+        bool operator!= (unsigned end) const { return end <= (lastrow - firstrow); }
+        col_iterator(const super& other, unsigned firstrow, unsigned lastrow) : super(other),
+            firstrow(firstrow), lastrow(lastrow)
 		{
 			while (super::pos() < firstrow) {
 				++(*this);
@@ -320,7 +324,7 @@ namespace logic {
         typedef typename base::base_const base_const;
         typedef typename base::base_mut base_mut;
         typedef col_iterator self;
-        unsigned firstrow;
+        unsigned firstrow, lastrow;
 
     public:
 
@@ -330,9 +334,10 @@ namespace logic {
         void set(const base_mut& other) { super::explicit_set(firstrow + other.pos()); }
 		void explicit_set(unsigned i) { super::explicit_set(firstrow + i); }
 		unsigned pos() const { return super::pos() - firstrow; }
-		bool operator!= (unsigned end) const { return super::operator!=(firstrow + end); }
-		col_iterator(const super& other, unsigned firstrow) : super(other),
-		firstrow(firstrow)
+        //bool operator!= (unsigned end) const { return super::operator!=(firstrow + end); }
+        bool operator!= (unsigned end) const { return end <= (lastrow - firstrow); }
+        col_iterator(const super& other, unsigned firstrow, unsigned lastrow) : super(other),
+        firstrow(firstrow), lastrow(lastrow)
 		{
 			while (super::pos() < firstrow) {
 				++(*this);
