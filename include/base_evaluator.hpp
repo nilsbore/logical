@@ -12,6 +12,8 @@
 #include "util/string.hpp"
 #include "util/info_auto_ptr.hpp"
 
+//#include <iostream> // FOR DEBUG
+
 using namespace logic;
 
 template <typename Value, typename OutStream>

@@ -143,7 +143,7 @@ namespace util {
 		
 		bool valid() const
 		{
-			return matrix != NULL && (type == VALID || type == VALID_VOID);
+            return (matrix != NULL && type == VALID) || type == VALID_VOID;
 		}
 		
 		info_auto_ptr() : matrix(NULL), message(NULL), type(NOT_INIT) {}

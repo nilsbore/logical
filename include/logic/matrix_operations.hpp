@@ -1,8 +1,6 @@
 #ifndef MATRIX_OPERATIONS_HPP
 #define MATRIX_OPERATIONS_HPP
 
-#include <iostream> // FOR DEBUG
-
 namespace logic {
 	
     // change to use the new std::function instead
@@ -64,6 +62,18 @@ namespace logic {
         void operator() (Value& first, const Value& second)
         {
             first = second;
+        }
+
+    };
+
+    template<typename Operator, typename Value>
+    struct ApplyAndStore {
+
+        Operator op;
+
+        void operator() (Value& first, const Value& second)
+        {
+            first = op(second);
         }
 
     };
@@ -437,8 +447,10 @@ namespace logic {
 	
 	template <typename Operator, typename Matrix>
 	Matrix* apply_function(Matrix& value)
-	{
-		return NULL;
+    {
+        Matrix* rtn = value.instantiate(value.height(), value.width());
+        for_each_row<ApplyAndStore<Operator, typename Matrix::value_type> >(*rtn, value);
+        return rtn;
 	}
 	
 } // namespace logic
