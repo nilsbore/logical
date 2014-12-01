@@ -23,7 +23,8 @@ namespace util {
 				*message = "Error in plus operation: operand dimension mismatch.";
 				return *this;
 			}
-			if (other.matrix->is_dense()) {
+            if ((matrix->is_sparse() && other.matrix->is_dense()) ||
+                (matrix->is_scalar() && !other.matrix->is_scalar())) {
 				*other.matrix += *matrix;
 				return other;
 			}
@@ -37,8 +38,10 @@ namespace util {
 				*message = "Error in minus operation: operand dimension mismatch.";
 				return *this;
 			}
-			if (other.matrix->is_dense()) {
-				*other.matrix -= *matrix;
+            if ((matrix->is_sparse() && other.matrix->is_dense()) ||
+                (matrix->is_scalar() && !other.matrix->is_scalar())) {
+                *other.matrix *= typename matrix_type::scalar_type(-1.0f);
+                *other.matrix += *matrix;
 				return other;
 			}
 			*matrix -= *other.matrix;
@@ -51,7 +54,8 @@ namespace util {
 				*message = "Error in times operation: operand dimension mismatch.";
 				return *this;
 			}
-			if (other.matrix->is_sparse()) {
+            if ((other.matrix->is_sparse() && matrix->is_dense()) ||
+                (matrix->is_scalar() && !other.matrix->is_scalar())) {
 				*other.matrix *= *matrix;
 				return other;
 			}
@@ -65,7 +69,8 @@ namespace util {
 				*message = "Error in division operation: operand dimension mismatch.";
 				return *this;
 			}
-			if (other.matrix->is_sparse()) {
+            if ((other.matrix->is_sparse() && matrix->is_dense()) ||
+                (matrix->is_scalar() && !other.matrix->is_scalar())) {
 				*other.matrix /= *matrix;
 				return other;
 			}

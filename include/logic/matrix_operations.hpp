@@ -57,6 +57,26 @@ namespace logic {
 	};
 
     template<typename Value>
+    struct Subtract {
+
+        void operator() (Value& first, const Value& second)
+        {
+            first -= second;
+        }
+
+    };
+
+    template<typename Value>
+    struct Multiply {
+
+        void operator() (Value& first, const Value& second)
+        {
+            first *= second;
+        }
+
+    };
+
+    template<typename Value>
     struct Assign {
 
         void operator() (Value& first, const Value& second)
@@ -381,13 +401,13 @@ namespace logic {
 	template <typename Matrix1, typename Matrix2>
 	void subtract_rows(Matrix1& first, const Matrix2& second)
 	{
-		
+        for_each_row<Subtract<typename Matrix1::value_type> >(first, second);
 	}	
 	
 	template <typename Matrix1, typename Matrix2>
 	void multiply_rows(Matrix1& first, const Matrix2& second)
 	{
-		
+        for_each_row<Multiply<typename Matrix1::value_type> >(first, second);
 	}	
 	
 	template <typename Matrix1, typename Matrix2>
