@@ -18,7 +18,7 @@ namespace logic {
 		typedef virtual_matrix<Value> super;
 		typedef Value value_type;
 		
-		template <typename> friend class sparse_row_iterator;
+        template <typename> friend class sparse_row_iterator; // could also instantiate this
 		template <typename> friend class sparse_col_iterator;
 		template <typename> friend class row_iterator;
 		template <typename> friend class col_iterator;
@@ -288,10 +288,8 @@ namespace logic {
 		}
 		
 		self& operator= (const self& other)
-		{
-			typedef assign<row_iterator<self>, row_iterator<const self> > oper_type;
-			
-			for_each_row<oper_type>(*this, other);
+        {
+            assign_rows(*this, other);
 			return *this;
 		}
 		
@@ -359,9 +357,7 @@ namespace logic {
 
 		sparse_matrix(const self& other) : super(super::SPARSE),
 										   rows(other.rows), cols(other.cols)
-		{
-			typedef assign<row_iterator<self>, row_iterator<const self> > oper_type;
-			
+        {
 			row_vals = new node*[rows];
 			col_vals = new node*[cols];
 			for (unsigned y = 0; y < rows; ++y) {
@@ -370,7 +366,7 @@ namespace logic {
 			for (unsigned x = 0; x < cols; ++x) {
 				col_vals[x] = NULL;
 			}
-			for_each_row<oper_type>(*this, other);
+            assign_rows(*this, other);
 		}
 		
 		sparse_matrix(const value_type& val, unsigned size, int) : super(super::SPARSE),

@@ -2,6 +2,7 @@
 #define VIRTUAL_RECURSATOR_HPP
 
 #include "../util/convenience.hpp"
+#include "iterator.hpp"
 
 namespace logic {
 	
@@ -24,6 +25,7 @@ namespace logic {
 		
 		typedef Value value_type;
 		typedef typename vmatrix::matrix_type matrix_type;
+        typedef virtual_recursator virtual_type;
 		typedef recursator<typename util::if_c<IsConst, const dense_matrix<value_type>,
 				dense_matrix<value_type> >::type> dense_type;
 		typedef recursator<typename util::if_c<IsConst, const sparse_matrix<value_type>,
@@ -78,6 +80,26 @@ namespace logic {
 		virtual self& operator-= (const virtual_recursator<value_type, true>&) = 0;
 		virtual self& operator/= (const virtual_recursator<value_type, true>&) = 0;
 		virtual virtual_matrix<value_type>* product(const virtual_recursator<value_type, true>&) const = 0;
+
+        row_iterator<self> begin_row(unsigned row)
+        {
+            return row_iterator<self>(*this, row);
+        }
+
+        row_iterator<const self> begin_row(unsigned row) const
+        {
+            return row_iterator<const self>(*this, row);
+        }
+
+        col_iterator<self> begin_col(unsigned col)
+        {
+            return col_iterator<self>(*this, col);
+        }
+
+        col_iterator<const self> begin_col(unsigned col) const
+        {
+            return col_iterator<const self>(*this, col);
+        }
 		
 		virtual_recursator(matrix_type type) : type(type) {}
 		virtual ~virtual_recursator() {}

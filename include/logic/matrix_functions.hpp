@@ -160,19 +160,19 @@ namespace logic {
 		Matrix* rtn;
 		if (name == "sin") {
 			if (args.length() != 1) return "Sin only takes one input argument.";
-			rtn = apply_function<Sin<value_type> >(*args);
+            rtn = apply_function<Sin<value_type> >(*args);
 		}
 		else if (name == "cos") {
 			if (args.length() != 1) return "Cos only takes one input argument.";
-			rtn = apply_function<Cos<value_type> >(*args);
+            rtn = apply_function<Cos<value_type> >(*args);
 		}
 		else if (name == "exp") {
 			if (args.length() != 1) return "Exp only takes one input argument.";
-			rtn = apply_function<Exp<value_type> >(*args);
+            rtn = apply_function<Exp<value_type> >(*args);
 		}
 		else if (name == "log") {
 			if (args.length() != 1) return "Log only takes one input argument.";
-			rtn = apply_function<Log<value_type> >(*args);
+            rtn = apply_function<Log<value_type> >(*args);
 		}
 		else {
 			return "Function not found.";

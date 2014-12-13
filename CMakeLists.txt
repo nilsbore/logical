@@ -8,7 +8,7 @@ set(LOGIC_HEADERS include/logic/algorithms.hpp include/logic/dense_matrix.hpp in
                   include/logic/recursator.hpp include/logic/build_proxy.hpp include/logic/functors.hpp
                   include/logic/scalar.hpp include/logic/string_matrix.hpp include/logic/virtual_matrix.hpp
                   include/logic/constants.hpp include/logic/matrix_factory.hpp include/logic/operator_priorities.hpp include/logic/sparse_matrix.hpp
-                  include/logic/upper_triangular.hpp include/logic/virtual_recursator.hpp)
+                  include/logic/upper_triangular.hpp include/logic/virtual_recursator.hpp include/logic/iterator.hpp)
 
 set(UTIL_HEADERS include/util/complex.hpp include/util/convenience.hpp include/util/file.hpp include/util/info_auto_ptr.hpp
                  include/util/list.hpp include/util/map.hpp include/util/string.hpp)
