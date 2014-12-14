@@ -46,6 +46,7 @@ namespace logic {
 		matrix_type get_type() const { return type; }
 		bool is_dense() const { return type == vmatrix::DENSE || type == vmatrix::STRING; }
 		bool is_scalar() const { return height() == 1 && width() == 1; }
+        bool is_true_scalar() const { return type == vmatrix::SCALAR; }
 		bool is_sparse() const { return type == vmatrix::SPARSE; }
 		bool is_string() const { return type == vmatrix::STRING; }
 		bool is_vector() const { return height() == 1 || width() == 1; }

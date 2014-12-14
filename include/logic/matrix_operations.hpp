@@ -321,7 +321,7 @@ namespace logic {
         typedef typename Matrix2::sparse_type sparse_type;
         typedef	typename Matrix2::scalar_type scalar_type;
 
-        if (second.is_scalar()) { // kanske bara ta in värdet ist
+        if (second.is_true_scalar()) { // kanske bara ta in värdet ist
             const scalar_type& sc = dynamic_cast<const scalar_type&> (second);
             Operator<Matrix1, const scalar_type> op;
             op(first, sc);
@@ -350,7 +350,7 @@ namespace logic {
         typedef typename Matrix2::sparse_type sparse_type;
         typedef	typename Matrix2::scalar_type scalar_type;
 
-        if (second.is_scalar()) { // kanske bara ta in värdet ist
+        if (second.is_true_scalar()) { // kanske bara ta in värdet ist
             const scalar_type& sc = dynamic_cast<const scalar_type&> (second);
             Operator<Function, Matrix1, const scalar_type> op;
             op(f, first, sc);
