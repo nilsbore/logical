@@ -68,6 +68,16 @@ namespace logic {
         }
     };
 
+    template <>
+    struct Add<scalar<double>, const scalar<double> > {
+
+        void operator() (scalar<double>& first, const scalar<double>& second)
+        {
+            std::cout << "Using my fancy new Add function with only scalars" << std::endl;
+            first(0, 0) += second(0, 0);
+        }
+    };
+
     template<typename Matrix1, typename Matrix2>
     struct Subtract {
         typedef row_iterator<Matrix1> iter_type1;
@@ -102,6 +112,16 @@ namespace logic {
                     ++it;
                 }
             }
+        }
+    };
+
+    template <>
+    struct Subtract<scalar<double>, const scalar<double> > {
+
+        void operator() (scalar<double>& first, const scalar<double>& second)
+        {
+            std::cout << "Using my fancy new Subtract function with only scalars" << std::endl;
+            first(0, 0) -= second(0, 0);
         }
     };
 
@@ -189,6 +209,16 @@ namespace logic {
         }
     };
 
+    template <>
+    struct Multiply<scalar<double>, const scalar<double> > {
+
+        void operator() (scalar<double>& first, const scalar<double>& second)
+        {
+            std::cout << "Using my fancy new Multiply function with only scalars" << std::endl;
+            first(0, 0) *= second(0, 0);
+        }
+    };
+
     template<typename Matrix1, typename Matrix2>
     struct Divide {
         typedef row_iterator<Matrix1> iter_type1;
@@ -226,6 +256,16 @@ namespace logic {
         }
     };
 
+    template <>
+    struct Divide<scalar<double>, const scalar<double> > {
+
+        void operator() (scalar<double>& first, const scalar<double>& second)
+        {
+            std::cout << "Using my fancy new Divide function with only scalars" << std::endl;
+            first(0, 0) /= second(0, 0);
+        }
+    };
+
     template<typename Operator, typename Matrix1, typename Matrix2>
     struct ApplyAndStore {
         typedef row_iterator<Matrix1> iter_type1;
@@ -260,6 +300,16 @@ namespace logic {
                     ++it;
                 }
             }
+        }
+    };
+
+    template<typename Operator>
+    struct ApplyAndStore<Operator, scalar<double>, const scalar<double> > {
+
+        void operator() (Operator& op, scalar<double>& first, const scalar<double>& second)
+        {
+            std::cout << "Using my fancy new ApplyAndStore function with only scalars" << std::endl;
+            first(0, 0) = op(second(0, 0));
         }
     };
 	

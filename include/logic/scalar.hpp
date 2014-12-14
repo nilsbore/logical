@@ -28,26 +28,26 @@ namespace logic {
 		
 		// Operators for matrices
 		super& operator+= (const super& other)
-		{
-			val += other(0, 0);
+        {
+            add_rows(*this, other);
 			return *this;
 		}
 		
 		super& operator-= (const super& other)
 		{
-			val -= other(0, 0);
+            subtract_rows(*this, other);
 			return *this;
 		}
 		
 		super& operator*= (const super& other)
 		{
-			val *= other(0, 0);
+            multiply_rows(*this, other);
 			return *this;
 		}
 		
 		super& operator/= (const super& other)
 		{
-			val /= other(0, 0);
+            divide_rows(*this, other);
 			return *this;
 		}
 		
@@ -59,25 +59,25 @@ namespace logic {
 		// Operators for non-constant recursators
 		super& operator+= (const virtual_recursator<value_type, false>& other)
 		{
-			val += other(0, 0);
+            add_rows(*this, other);
 			return *this;
 		}
 		
 		super& operator-= (const virtual_recursator<value_type, false>& other)
 		{
-			val -= other(0, 0);
+            subtract_rows(*this, other);
 			return *this;
 		}
 		
 		super& operator*= (const virtual_recursator<value_type, false>& other)
 		{
-			val *= other(0, 0);
+            multiply_rows(*this, other);
 			return *this;
 		}
 		
 		super& operator/= (const virtual_recursator<value_type, false>& other)
 		{
-			val /= other(0, 0);
+            divide_rows(*this, other);
 			return *this;
 		}
 		
@@ -89,25 +89,25 @@ namespace logic {
 		// Operators for constant recursators
 		super& operator+= (const virtual_recursator<value_type, true>& other)
 		{
-			val += other(0, 0);
+            add_rows(*this, other);
 			return *this;
 		}
 		
 		super& operator-= (const virtual_recursator<value_type, true>& other)
 		{
-			val -= other(0, 0);
+            subtract_rows(*this, other);
 			return *this;
 		}
 		
 		super& operator*= (const virtual_recursator<value_type, true>& other)
 		{
-			val *= other(0, 0);
+            multiply_rows(*this, other);
 			return *this;
 		}
 		
 		super& operator/= (const virtual_recursator<value_type, true>& other)
 		{
-			val /= other(0, 0);
+            divide_rows(*this, other);
 			return *this;
 		}
 		
@@ -118,7 +118,7 @@ namespace logic {
 		
 		self& operator= (const self& other)
 		{
-			val = other.val;
+            assign_rows(*this, other);
 			return *this;
 		}
 		
