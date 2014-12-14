@@ -322,17 +322,17 @@ namespace logic {
         typedef	typename Matrix2::scalar_type scalar_type;
 
         if (second.is_scalar()) { // kanske bara ta in värdet ist
-            const scalar_type& sc = static_cast<const scalar_type&> (second);
+            const scalar_type& sc = dynamic_cast<const scalar_type&> (second);
             Operator<Matrix1, const scalar_type> op;
             op(first, sc);
         }
         else if (second.is_dense()) {
-            const dense_type& d = static_cast<const dense_type&> (second);
+            const dense_type& d = dynamic_cast<const dense_type&> (second);
             Operator<Matrix1, const dense_type> op;
             op(first, d);
         }
         else if (second.is_sparse()) {
-            const sparse_type& s = static_cast<const sparse_type&> (second);
+            const sparse_type& s = dynamic_cast<const sparse_type&> (second);
             Operator<Matrix1, const sparse_type> op;
             op(first, s);
         }
@@ -351,17 +351,17 @@ namespace logic {
         typedef	typename Matrix2::scalar_type scalar_type;
 
         if (second.is_scalar()) { // kanske bara ta in värdet ist
-            const scalar_type& sc = static_cast<const scalar_type&> (second);
+            const scalar_type& sc = dynamic_cast<const scalar_type&> (second);
             Operator<Function, Matrix1, const scalar_type> op;
             op(f, first, sc);
         }
         else if (second.is_dense()) {
-            const dense_type& d = static_cast<const dense_type&> (second);
+            const dense_type& d = dynamic_cast<const dense_type&> (second);
             Operator<Function, Matrix1, const dense_type> op;
             op(f, first, d);
         }
         else if (second.is_sparse()) {
-            const sparse_type& s = static_cast<const sparse_type&> (second);
+            const sparse_type& s = dynamic_cast<const sparse_type&> (second);
             Operator<Function, Matrix1, const sparse_type> op;
             op(f, first, s);
         }

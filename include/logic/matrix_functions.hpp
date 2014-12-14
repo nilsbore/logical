@@ -5,6 +5,7 @@
 #include "../util/list.hpp"
 #include "matrix_operations.hpp"
 #include "functors.hpp"
+#include "matrix_factory.hpp"
 
 namespace logic {
 	
@@ -174,6 +175,12 @@ namespace logic {
 			if (args.length() != 1) return "Log only takes one input argument.";
             rtn = apply_function<Log<value_type> >(*args);
 		}
+        else if (name == "eye") {
+            return eye<value_type>((*args)(0, 0));
+        }
+        else if (name == "diag") {
+            return diag<value_type>(*args);
+        }
 		else {
 			return "Function not found.";
 		}
