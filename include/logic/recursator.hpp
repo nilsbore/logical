@@ -14,8 +14,8 @@ namespace logic {
 		typedef typename Matrix::value_type value_type;
 		typedef virtual_recursator<value_type, util::is_const<Matrix>::value> super;
         typedef typename super::dense_type dense_type;
-        typedef typename super::dense_type sparse_type;
-        typedef typename super::dense_type scalar_type;
+        typedef typename super::sparse_type sparse_type;
+        typedef typename super::scalar_type scalar_type;
 		
 	private:
 		

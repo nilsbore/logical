@@ -25,6 +25,7 @@ class build_proxy {
 public:
 	
     typedef Matrix matrix_type;
+    typedef typename Matrix::scalar_type scalar_type;
     typedef build_node<matrix_type> matrix_node;
 	typedef build_node<matrix_node> row_node;
     typedef util::info_auto_ptr<matrix_type, util::string> return_type;
@@ -85,7 +86,13 @@ public:
         if (current_cols != cols) {
             return "Last row doesn't agree with matrix dimensions.";
         }
-        matrix_type* rtn = first->val->val->instantiate(rows, cols);
+        matrix_type* rtn;
+        if (rows == 1 && cols == 1) {
+            rtn = new scalar_type(0.0f);
+        }
+        else {
+            rtn = first->val->val->instantiate(rows, cols);
+        }
         current_row = first;
         current_matrix = first->val;
         size_t current_i, current_j;

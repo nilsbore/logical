@@ -163,9 +163,9 @@ namespace logic {
     };*/
 
     template <>
-    struct Assign<scalar<double>, const scalar<double> > {
+    struct Assign<recursator<scalar<double> >, const scalar<double> > {
 
-        void operator() (scalar<double>& first, const scalar<double>& second)
+        void operator() (recursator<scalar<double> >& first, const scalar<double>& second)
         {
             std::cout << "Using my fancy new Assign function with only scalars" << std::endl;
             first(0, 0) = second(0, 0);
@@ -287,6 +287,27 @@ namespace logic {
     };
 
     template<typename Operator, typename Matrix1>
+    struct ApplyAndStore<Operator, Matrix1, const sparse_matrix<typename Matrix1::value_type> > {
+        typedef const sparse_matrix<typename Matrix1::value_type> sparse_type;
+        typedef row_iterator<Matrix1> iter_type1;
+        typedef row_iterator<sparse_type> iter_type2;
+
+        void operator() (Operator& op, Matrix1& first, sparse_type& second)
+        {
+            std::cout << "Using my fancy new ApplyAndStore function with sparse matrices" << std::endl;
+            for (unsigned y = 0; y < first.height(); ++y) {
+                iter_type1 it1 = first.begin_row(y);
+                iter_type2 it2 = second.begin_row(y);
+                it1.set(it2);
+                while(it2 != first.end_row()) {
+                    *it1 = op(*it2);
+                    it1.set(++it2);
+                }
+            }
+        }
+    };
+
+    template<typename Operator, typename Matrix1>
     struct ApplyAndStore<Operator, Matrix1, const scalar<double> > {
         typedef row_iterator<Matrix1> iter_type;
 
@@ -337,6 +358,7 @@ namespace logic {
             op(first, s);
         }
         else {
+            std::cout << "Did not match a type" << std::endl;
             Operator<Matrix1, const Matrix2> op;
             op(first, second);
         }

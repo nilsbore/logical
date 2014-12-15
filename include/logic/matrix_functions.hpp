@@ -151,6 +151,29 @@ namespace logic {
 		
 		return true;
 	}
+
+    template<typename Matrix>
+    util::info_auto_ptr<Matrix, util::string> get_type(const Matrix& arg)
+    {
+        typedef typename Matrix::value_type value_type;
+        typedef string_matrix<value_type> string_type;
+
+        if (arg.is_true_scalar()) { // kanske bara ta in värdet ist
+            return new string_type(util::string("scalar"));
+        }
+        else if (arg.is_string()) {
+            return new string_type(util::string("string"));
+        }
+        else if (arg.is_dense()) {
+            return new string_type(util::string("dense"));
+        }
+        else if (arg.is_sparse()) {
+            return new string_type(util::string("sparse"));
+        }
+        else {
+            return "Unknown type";
+        }
+    }
 	
 	template<typename Matrix>
 	util::info_auto_ptr<Matrix, util::string> base_functions(const util::string& name,
@@ -180,6 +203,9 @@ namespace logic {
         }
         else if (name == "diag") {
             return diag<value_type>(*args);
+        }
+        else if (name == "type") {
+            return get_type(*args);
         }
 		else {
 			return "Function not found.";
