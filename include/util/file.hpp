@@ -18,7 +18,7 @@ namespace util {
 			data_pos line;
 		};
 		
-		friend bool read_file(self&, util::string&);
+        friend bool read_file(self&, const util::string&);
 				
 		pos get_pos()
 		{
@@ -79,7 +79,7 @@ namespace util {
             line_length.insert(&length);
 		}
 		
-		file(util::string& name) : data(), line_length()
+        file(const util::string& name) : data(), line_length()
 		{
 			read_file(*this, name);
 		}
@@ -110,7 +110,7 @@ namespace util {
 		return s;
 	}
 	
-	bool read_file(file& f, util::string& name)
+    bool read_file(file& f, const util::string& name)
 	{
 		char* cstr = new char[name.length() + 4];
 		unsigned i;

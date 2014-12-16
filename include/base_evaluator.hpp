@@ -93,8 +93,8 @@ protected:
 		}
 		else if (arg == "end") {
 			return new scalar_type(index_end);
-		}
-		return "Variable not found."; // fix showing name
+        }
+        return return_type("Variable not found."); // fix showing name
 	}
 	
 	return_type build_index(const matrix_type& value)
@@ -146,9 +146,9 @@ protected:
 		}
 		else if (input.is_number()) {
 			rtn = get_scalar();
-		}
+        }
 		else if (input.is_letter()) {
-			rtn = name(input.next_name());
+            rtn = name(input.next_name());
 		}
 		else if (*input == '"') {
 			input++;
@@ -156,7 +156,7 @@ protected:
 		}
 		else {
 			return "Symbol not recognized as type.";
-		}
+        }
 		if (!rtn.valid()) return rtn;
 		if (*input == '[') {
 			input++; // skipblanks

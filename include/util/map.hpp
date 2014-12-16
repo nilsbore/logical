@@ -14,8 +14,8 @@ namespace util {
 		key_type key;
         value_type* val;
 		
-        map_node(key_type& nkey, value_type* nval) : key(nkey), val(nval),
-													 next_node(NULL) {}
+        map_node(const key_type& nkey, value_type* nval) : key(nkey), val(nval),
+            next_node(NULL) {}
 		
 		~map_node()
 		{
@@ -33,7 +33,7 @@ namespace util {
 		typedef Value value_type;
 		typedef map_node<Key, Value> node_type;
 		
-        bool insert(key_type& key, value_type* val) {
+        bool insert(const key_type& key, value_type* val) {
 			unsigned pos = key.hash_code();
 			pos %= capacity;
 			node_type* current = vals[pos];

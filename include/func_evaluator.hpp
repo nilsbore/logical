@@ -45,7 +45,7 @@ protected:
         util::file* f = functions[funcname];
 		if (f == NULL) return "No match for function.";
 		self func_eval(base::output);
-		return func_eval.evaluate_function(f, funcname, args);		
+        return func_eval.evaluate_function(f, funcname, args);
 	}
 	
     return_type evaluate_function(util::file* func, const util::string& funcname, util::list<matrix_type>& args)
@@ -281,7 +281,10 @@ protected:
 	
 public:
 	
-	func_evaluator(out_stream& output) : var(output), last_vars() {}
+    func_evaluator(out_stream& output) : var(output), last_vars() {
+        util::file* fn = new util::file(util::string("name.mv"));
+        functions.insert(util::string("name"), fn);
+    }
 	
 private:
 	

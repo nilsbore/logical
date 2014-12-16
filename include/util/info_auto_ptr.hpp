@@ -110,11 +110,11 @@ namespace util {
 		}
 
         // can be const since same class
-        void operator= (const self& other)
+        self& operator= (const self& other)
 		{
-			if (matrix == other.matrix) {
-				return;
-			}
+            if (this == &other) {
+                return *this;
+            }
             delete matrix; delete message;
 			matrix = other.matrix;
 			message = other.message;
@@ -122,12 +122,13 @@ namespace util {
 			other.matrix = NULL;
 			other.message = NULL;
 			other.type = NOT_INIT;
+            return *this;
 		}
 
-        void operator= (self&& other)
+        self& operator= (const self&& other)
         {
-            if (matrix == other.matrix) {
-                return;
+            if (this == &other) {
+                return *this;
             }
             delete matrix; delete message;
             matrix = other.matrix;
@@ -136,11 +137,12 @@ namespace util {
             other.matrix = NULL;
             other.message = NULL;
             other.type = NOT_INIT;
+            return *this;
         }
 		
 		message_type get_info() const
 		{
-			if (message == NULL) {
+            if (message == NULL) {
 				return message_type("No information supplied.");
 			}
 			return message_type(*message);
@@ -153,7 +155,7 @@ namespace util {
 		
 		info_auto_ptr() : matrix(NULL), message(NULL), type(NOT_INIT) {}
 		info_auto_ptr(matrix_type* matrix) : matrix(matrix), message(NULL), type(VALID) {}
-		info_auto_ptr(const char* str) : matrix(NULL), message(new message_type(str)), type(SYNTAX_ERROR) {}
+        info_auto_ptr(const char* str) : matrix(NULL), message(new message_type(str)), type(SYNTAX_ERROR) {}
 		info_auto_ptr(ptr_type type) : matrix(NULL), message(NULL), type(type) {}
 		info_auto_ptr(const self& other)
 		{
@@ -164,7 +166,7 @@ namespace util {
 			other.message = NULL;
 			other.type = NOT_INIT;
 		}
-        info_auto_ptr(self&& other)
+        info_auto_ptr(const self&& other)
         {
             matrix = other.matrix;
             message = other.message;
@@ -178,9 +180,9 @@ namespace util {
 		
 	private:
 		
-		mutable matrix_type* matrix;
-		mutable message_type* message;
-		mutable ptr_type type;
+        mutable matrix_type* matrix;
+        mutable message_type* message;
+        mutable ptr_type type;
 		
 	};
 	
