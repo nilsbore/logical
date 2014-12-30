@@ -13,6 +13,7 @@ namespace util {
 		struct node {
 			
 			node(value_type* value) : value(value), next(NULL) {}
+            //node() : value(NULL), next(NULL) {}
             ~node() { delete next; delete value; }
 			
 			node* next;
@@ -25,15 +26,19 @@ namespace util {
 		void set_pos(node* newpos) { pos = newpos; }
 		
 		void begin() { pos = first; }
+        void rbegin() { pos = last; }
 		bool end() { return pos == NULL; }
 		
 		void operator++ (int) { pos = pos->next; }
 		
 		value_type& operator* ()
 		{
-			/*if (pos == NULL) {
+            /*if (pos == NULL) {
 				return value_type();
-			}*/
+            }*/
+            if (pos == NULL) {
+                std::cout << "Now it was null!" << std::endl;
+            }
 			return *(pos->value);
 		}
 		
@@ -88,12 +93,13 @@ namespace util {
 		void insert(value_type* value)
 		{
 			if (first == NULL) {
-				first = new node(value);
-				last = pos = first;
+                first = new node(value);
+                pos = first;
+                last = first;
 				size++;
 				return;
 			}
-			last->next = new node(value);
+            last->next = new node(value);
 			last->next->previous = last;
 			last = last->next;
 			size++;
@@ -119,8 +125,10 @@ namespace util {
 			if (pos == last) {
 				pos = first;
 			}
+            node* temp;
+            temp = last->previous;
 			delete last;
-			last = NULL;
+            last = temp;
 			size--;
 		}
 		

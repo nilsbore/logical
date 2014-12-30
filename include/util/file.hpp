@@ -75,8 +75,8 @@ namespace util {
 			if (value == NULL || length == 0) {
 				return;
 			}
-            data.insert(&value);
-            line_length.insert(&length);
+            data.insert(new (char*)(value));
+            line_length.insert(new unsigned(length));
 		}
 		
         file(const util::string& name) : data(), line_length()
@@ -93,7 +93,7 @@ namespace util {
 		
 	private:
 		util::list<unsigned> line_length;
-		util::list<char*> data;
+        util::list<char*> data;
 	};
 	
 	template<typename OutStream>
@@ -128,24 +128,25 @@ namespace util {
 		std::string::iterator c;
 		unsigned start, length;
 		while (!newfile.eof()) {
-			std::getline(newfile, line);
+            std::getline(newfile, line);
 			start = 0;
 			for (c = line.begin(); c != line.end(); ++c, ++start) {
 				if (*c != ' ' && *c != '\t') {
 					break;
 				}
 			}
-			if (c == line.end() || *c == '#') {
+            if (c == line.end() || *c == '#' || *c == '\n') {
 				continue;
 			}
 			length = line.size() - start;
 			char* nline = new char[length];
-			for (i = 0; i < length; ++i, ++c) {
+            for (i = 0; i < length; ++i, ++c) {
 				nline[i] = *c;
 			}
 			f.insert_line(nline, length);
 		}
 		newfile.close();
+
 		return true;
 	}
 

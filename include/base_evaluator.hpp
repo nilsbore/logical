@@ -69,18 +69,27 @@ protected:
 		return return_type::VALID_VOID;
 	}
 	
-	virtual return_type function(const util::string& arg)
+    virtual return_type function(const util::string& funcname, util::list<matrix_type>& args)
 	{
-		util::list<matrix_type> args;
-		return_type temp = arguments(args);
-		if (!temp.valid()) return temp;
-		return base_functions(arg, args);;
+        if (funcname == "disp") {
+            if (args.length() == 0) {
+                return "No arguments supplied to disp.";
+            }
+            for (args.begin(); !args.end(); args++) {
+                output << *args;
+            }
+            return new scalar_type(0.0);
+        }
+        return base_functions(funcname, args);
 	}
 	
 	virtual return_type name(const util::string& arg) {
 		if (*input == '(') {
 			input++;
-			return function(arg);
+            util::list<matrix_type> args;
+            return_type temp = arguments(args);
+            if (!temp.valid()) return temp;
+            return function(arg, args);
 		}
 		if (arg == "pi") {
 			return new scalar_type(3.14159265);

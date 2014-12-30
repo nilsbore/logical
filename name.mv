@@ -1,8 +1,9 @@
 function i = name(a, b, c)
-
- i = a+b+c;
- a = 22;
- b = 222;
- c = 211; # this is a note
+i=0;
+if (c == 1)
+i = a-b;
+else
+i = a+b;
+end
 
 end

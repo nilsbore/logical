@@ -28,33 +28,47 @@ protected:
 
 	void enter_namespace()
 	{
-		last_vars.insert_empty();
+        last_vars.insert_empty();
+        last_vars.rbegin();
 	}
 	
 	void exit_namespace()
-	{
-		for ((*last_vars).begin(); !(*last_vars).end(); (*last_vars)++) {
-			var::variables.pull(*(*last_vars));
-		}
-		last_vars.delete_last();
+    {
+        last_vars.rbegin();
+        for ((*last_vars).begin(); !(*last_vars).end(); (*last_vars)++) {
+            var::variables.pull(*(*last_vars));
+        }
+        last_vars.delete_last();
+        last_vars.rbegin();
 	}
 	
-	return_type function(const util::string& funcname, util::list<matrix_type>& args) {
-		return_type temp = base::function(funcname);
-		if (temp.valid()) return temp;
+    return_type function(const util::string& funcname, util::list<matrix_type>& args)
+    {
+        return_type temp = base::function(funcname, args);
+        if (temp.valid()) return temp;
         util::file* f = functions[funcname];
-		if (f == NULL) return "No match for function.";
+        if (f == NULL)
+        {
+            std::cout << "No match for function." << std::endl;
+            return "No match for function.";
+        }
 		self func_eval(base::output);
-        return func_eval.evaluate_function(f, funcname, args);
+        return_type rtn = func_eval.evaluate_function(f, funcname, args);
+        std::cout << rtn.get_info() << std::endl;
+        return rtn;
 	}
 	
     return_type evaluate_function(util::file* func, const util::string& funcname, util::list<matrix_type>& args)
 	{
 		last_line = false;
+        function_file = func;
+        func->begin();
+        base::input.new_expression(func->get_line(), func->get_length());
         util::string checkfunc = base::input.next_name();
 		if (checkfunc != "function") return "Function definition has to begin with function.";
 		base::input.next_blanks();
-		util::string rtnname;
+        if (!base::input.is_letter()) return "Function has to return variable.";
+        util::string rtnname = base::input.next_name();
 		base::input.next_blanks();
 		if (*base::input != '=') return "Function has to return value with = operator";
 		base::input++;
@@ -64,12 +78,15 @@ protected:
 		base::input.next_blanks();
 		if (*base::input != '(') return "Function has to take at least one parameter.";
 		base::input++;
+        //enter_namespace();
         for (args.begin(); !args.end(); args++) {
             util::string varname = base::input.next_name();
 			if (varname.is_empty()) return "Invalid argument name.";
             var::variables.insert(varname, (*args).clone());
 			base::input.next_blanks();
 			if (*base::input == ')') {
+                base::input++;
+                base::input.next_blanks();
 				break;
 			}
 			if (*base::input != ',') return "Parameters are not separated by commas.";
@@ -77,11 +94,13 @@ protected:
 			base::input.next_blanks();
 		}
 		if (!base::input.end()) return "Too few parameters supplied.";
-		//set_script(true); // perhaps not needed?
+        enter_namespace();
+        //set_script(true); // perhaps not needed?
 		return_type temp = execute_statement(false);
-		//set_script(false); // perhaps not needed?
-		if (!temp.valid()) return temp;
+        //set_script(false); // perhaps not needed?
+        if (!temp.valid()) return temp;
         matrix_type* rtn = var::variables.pull(rtnname);
+        if (rtn == NULL) { return "Return value was not assigned"; }
         if (rtn->is_empty()) return "Return value hasn't been assigned.";
 		return rtn;
 	}
@@ -153,7 +172,9 @@ protected:
         for (unsigned row = 0; row < loop->height(); ++row) {
             for (unsigned col = 0; col < loop->width(); ++col) {
                 function_file->set_pos(start);
-                var::variables.insert(iter, new scalar_type((*loop)(row, col)));
+                if (var::variables.insert(iter, new scalar_type((*loop)(row, col)))) {
+                    add_to_namespace(iter);
+                }
 				temp = execute_statement(false);
 				if (!temp.valid()) return temp;
 			}
@@ -192,7 +213,7 @@ protected:
 						}
 					}
 					enter_namespace();
-					rtn = execute_statement(false);
+                    rtn = execute_statement(false);
 					exit_namespace();
 					return rtn;
 				}
@@ -203,7 +224,7 @@ protected:
 	
 	void add_to_namespace(util::string& varname)
 	{
-        (*last_vars).insert(&varname);
+        (*last_vars).insert(new util::string(varname));
 	}
 	
 	return_type evaluate_statement()
@@ -230,7 +251,7 @@ protected:
 		unsigned pos;
 		return_type temp;
 		while (true) {
-			temp = next_line();
+            temp = next_line();
 			if (!temp.valid()) return temp;
 			pos = base::input.get_pos();
             util::string word = base::input.next_name();
@@ -239,6 +260,8 @@ protected:
 					return return_type::VALID_VOID;
 				}
 				if (word == "if") {
+                    int a;
+                    a=2;
 					temp = execute_if();
 					if (!temp.valid()) return temp;
 					continue;
@@ -281,8 +304,8 @@ protected:
 	
 public:
 	
-    func_evaluator(out_stream& output) : var(output), last_vars() {
-        util::file* fn = new util::file(util::string("name.mv"));
+    func_evaluator(out_stream& output) : var(output), functions(31), last_vars() {
+        util::file* fn = new util::file(util::string("name"));
         functions.insert(util::string("name"), fn);
     }
 	

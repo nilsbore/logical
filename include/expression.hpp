@@ -160,6 +160,8 @@ public:
 		}
 		return !end();
 	}
+
+    unsigned length() const { return size; }
 	
 private:
 	
@@ -167,4 +169,16 @@ private:
 	unsigned size, pos;
 	
 };
+
+template<typename OutStream, typename FloatType>
+OutStream& operator<< (OutStream& s, expression<FloatType>& str)
+{
+    unsigned pos = str.get_pos();
+    str.set_pos(0);
+    for (unsigned i = 0; i < str.length(); ++i) {
+        s << str[i];
+    }
+    str.set_pos(pos);
+    return s;
+}
 #endif

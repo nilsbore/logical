@@ -111,16 +111,16 @@ namespace util {
 		
 		bool operator== (const char* other) const
 		{
-            if (other == NULL || other == '\0') {
+            if (other == NULL || *other == '\0') {
 				return false;
 			}
 			for (unsigned i = 0; i < size; ++i) {
-				if (vals[i] != *other || *other == '\0') {
+                if (vals[i] != *other || *other == '\0') {
 					return false;
 				}
-				other++;
+                other++;
 			}
-			if (*other != '\0') {
+            if (*other != '\0') {
 				return false;
 			}
 			return true;
