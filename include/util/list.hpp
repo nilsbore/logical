@@ -144,7 +144,8 @@ namespace util {
 			return NULL;
 		}
 		
-		unsigned length() { return size; }
+        unsigned length() const { return size; }
+        bool empty() const { return size == 0; }
 		
 		list() : first(NULL), last(NULL), pos(NULL), size(0) {}
 		~list() { delete first; }

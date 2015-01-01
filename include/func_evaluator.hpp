@@ -224,7 +224,9 @@ protected:
 	
 	void add_to_namespace(util::string& varname)
 	{
-        (*last_vars).insert(new util::string(varname));
+        if (!last_vars.empty()) {
+            (*last_vars).insert(new util::string(varname));
+        }
 	}
 	
 	return_type evaluate_statement()
