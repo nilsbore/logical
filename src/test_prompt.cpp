@@ -1,13 +1,14 @@
 #include <iostream>
 #include <func_evaluator.hpp>
 #include <iostream>
+#include "util/complex.hpp"
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
-    func_evaluator<double, ostream> eval(cout);
-    typedef base_evaluator<double, ostream>::return_type return_type;
+    func_evaluator<util::complex<double>, ostream> eval(cout);
+    typedef base_evaluator<util::complex<double>, ostream>::return_type return_type;
     std::string s;
     do {
         std::cout << ">> ";

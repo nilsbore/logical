@@ -44,7 +44,7 @@ namespace logic {
         if (first.width() != 1 || third.width() != 1) return "Linspace boundaries are not column vectors.";
 		if (first.height() != third.height()) return "Linspace boundaries heights do not agree.";
 		
-		unsigned length = second(0, 0);
+        unsigned length = static_cast<unsigned>(second(0, 0));
 		
         Matrix* rtn = new dense_type(first.height(), length); // dense
 		for (unsigned i = 0; i < first.height(); ++i) {
@@ -74,7 +74,7 @@ namespace logic {
 
 		for (unsigned y = 0; y < rows; ++y) {
 			for (unsigned x = 0; x < cols; ++x) {
-                (*rtn)(y, x) = value[(unsigned)pos(y, x)];
+                (*rtn)(y, x) = value[static_cast<unsigned>(pos(y, x))];
 			}
 		}
 		
@@ -97,7 +97,7 @@ namespace logic {
 		
 		for (unsigned y = 0; y < rows; ++y) {
 			for (unsigned x = 0; x < cols; ++x) {
-                (*rtn)(y, x) = value((unsigned)row[y], (unsigned)col[x]);
+                (*rtn)(y, x) = value(static_cast<unsigned>(row[y]), static_cast<unsigned>(col[x]));
 			}
 		}
 		
@@ -121,7 +121,7 @@ namespace logic {
 		
 		for (unsigned y = 0; y < rows; ++y) {
 			for (unsigned x = 0; x < cols; ++x) {
-				var[pos(y, x)] = value(y, x);
+                var[static_cast<unsigned>(pos(y, x))] = value(y, x);
 			}
 		}
 		
@@ -145,7 +145,7 @@ namespace logic {
 		
 		for (unsigned y = 0; y < rows; ++y) {
 			for (unsigned x = 0; x < cols; ++x) {
-				var(row[y], col[x]) = value(y, x);
+                var(static_cast<unsigned>(row[y]), static_cast<unsigned>(col[x])) = value(y, x);
 			}
 		}
 		
@@ -199,7 +199,7 @@ namespace logic {
             rtn = apply_function<Log<value_type> >(*args);
 		}
         else if (name == "eye") {
-            return eye<value_type>((*args)(0, 0));
+            return eye<value_type>(static_cast<unsigned>((*args)(0, 0)));
         }
         else if (name == "diag") {
             return diag<value_type>(*args);

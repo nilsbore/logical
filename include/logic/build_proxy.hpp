@@ -88,7 +88,7 @@ public:
         }
         matrix_type* rtn;
         if (rows == 1 && cols == 1) {
-            rtn = new scalar_type(0.0f);
+            rtn = new scalar_type(0.0);
         }
         else {
             rtn = first->val->val->instantiate(rows, cols);

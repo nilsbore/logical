@@ -97,6 +97,9 @@ protected:
 		else if (arg == "e") {
 			return new scalar_type(2.71828183);
 		}
+        else if (util::is_complex<value_type>::value && arg == "i") {
+            return new scalar_type(util::complex<typename util::get_base_type<value_type>::type>(0.0, 1.0));
+        }
 		else if (arg == "author") {
 			return new string_type(util::string("Nils Bore"));
 		}
@@ -132,7 +135,7 @@ protected:
 		if (*input != ']') return "Index expression not terminated correctly.";
 		input++;
 		index_end = previousend;
-		return logic::index(value, *first, *second);
+        return logic::index(value, *first, *second);
 	}
 	
 	return_type decide_type() // fixa plugin för användar-definierade typer. Metod i Object

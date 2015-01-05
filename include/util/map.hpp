@@ -37,9 +37,17 @@ namespace util {
 
             self& operator++ ()
             {
-                while (current_row) {
-
+                if (current_col == NULL || current_col->next == NULL) {
+                    size_t dist = size_t(current_row - iterated.vals);
+                    while (dist < iterated.capacity && *current_row = NULL) {
+                        current_row++;
+                    }
+                    current_col = *current_row;
                 }
+                else {
+                    current_col = current_col->next;
+                }
+                return *this;
             }
 
             value_type& operator* ()
@@ -49,14 +57,19 @@ namespace util {
                 }
             }
 
-            iterator(map& mymap)
+            iterator(map& iterated) : iterated(iterated)
             {
-                current_row = mymap.vals;
-                current_col = *mymap.vals;
+                current_row = iterated.vals;
+                current_col = *iterated.vals;
+            }
+
+            bool operator!= (const self& other) const {
+
             }
 
         private:
 
+            map& iterated;
             node_ptr* current_row;
             node_ptr current_col;
 
@@ -147,7 +160,8 @@ namespace util {
 			return NULL;
         }*/
 		
-		unsigned size() { return length; }
+        unsigned size() const { return length; }
+        bool empty() const { return length == 0; }
 		
 		map(const unsigned n = 31) : length(0), capacity(n)
 		{

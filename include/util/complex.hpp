@@ -14,12 +14,16 @@ namespace util {
 		friend value_type& re(self& c) { return c.real; }
 		friend value_type im(const self& c) { return c.imag; }
 		friend value_type& im(self& c) { return c.imag; }
+
+        operator char() const { return char(real); }
+        operator value_type() const { return char(real); }
+        operator unsigned() const { return unsigned(real); }
 		
 		self operator* (const self& other) const
 		{
 			self rtn;
 			re(rtn) = real * re(other) - imag * im(other);
-			im(rtn) = real * im(other) + imag * real(other);
+            im(rtn) = real * im(other) + imag * re(other);
 			return rtn;
 		}
 		
@@ -82,6 +86,11 @@ namespace util {
 		{
 			return real == re(other) && imag == im(other);
 		}
+
+        bool operator!= (const self& other) const
+        {
+            return !this->operator ==(other);
+        }
 		
 		self& operator= (const self& other)
 		{
@@ -91,21 +100,25 @@ namespace util {
 		}
 		
 		complex() : real(value_type(0)), imag(value_type(0)) {}
+        complex(value_type nre) : real(nre), imag(value_type(0)) {}
 		
-		complex(const value_type& nre, const value_type& nim) :
+        complex(value_type nre, value_type nim) :
 		real(nre), imag(nim) {}
 		
 		complex(const self& other) : real(re(other)), imag(im(other)) {}
 		
 	private:
 		
-		unsigned real, imag;
+        value_type real, imag;
 		
 	};
 	
 	template<typename OutStream, typename Value>
 	OutStream& operator<< (OutStream& s, const complex<Value>& c)
 	{
+        if (re(c) == 0 && im(c) == 0) {
+            s << 0;
+        }
 		if (re(c) != 0) {
 			s << re(c);
 			if (im(c) != 0) {
