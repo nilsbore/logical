@@ -38,7 +38,16 @@ protected:
 	
 	return_type get_scalar()
 	{
-		return new scalar_type(input.next_float());
+        typename util::get_base_type<value_type>::type real = input.next_float();
+        if (util::is_complex<value_type>::value && *input == 'i') {
+            input++;
+            if (input.is_letter()) {
+                input.previous();
+                return new scalar_type(real);
+            }
+            return new scalar_type(util::complex<typename util::get_base_type<value_type>::type>(0.0, real));
+        }
+        return new scalar_type(real);
 	}
 	
 	return_type text()
