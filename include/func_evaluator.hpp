@@ -49,9 +49,16 @@ protected:
         util::file* f = functions[funcname];
         if (f == NULL)
         {
-            std::cout << "No match for function." << std::endl;
-            return "No match for function.";
+            util::string filename = funcname + util::string(".mv");
+            if (!util::file::file_exists(filename)) {
+                std::cout << "No match for function." << std::endl;
+                return "No match for function.";
+            }
+            std::cout << funcname << std::endl;
+            std::cout << filename << std::endl;
+            add_function_file(funcname, funcname);
         }
+        f = functions[funcname];
 		self func_eval(base::output);
         return_type rtn = func_eval.evaluate_function(f, funcname, args);
         std::cout << rtn.get_info() << std::endl;
@@ -261,9 +268,7 @@ protected:
 				if (word == "end") {
 					return return_type::VALID_VOID;
 				}
-				if (word == "if") {
-                    int a;
-                    a=2;
+                if (word == "if") {
 					temp = execute_if();
 					if (!temp.valid()) return temp;
 					continue;
@@ -295,6 +300,12 @@ protected:
 			if (!result.valid()) return result;
 		}
 	}
+
+    void add_function_file(const util::string& funcname, const util::string& filename)
+    {
+        util::file* fn = new util::file(filename);
+        functions.insert(funcname, fn);
+    }
 	
 	return_type next_line()
 	{
@@ -306,9 +317,9 @@ protected:
 	
 public:
 	
-    func_evaluator(out_stream& output) : var(output), functions(31), last_vars() {
-        util::file* fn = new util::file(util::string("name"));
-        functions.insert(util::string("name"), fn);
+    func_evaluator(out_stream& output) : var(output), functions(31), last_vars()
+    {
+
     }
 	
 private:

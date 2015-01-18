@@ -90,6 +90,18 @@ namespace util {
 		{
 			return size;
 		}
+
+        self operator+ (const self& other) const
+        {
+            self rtn(size + other.length());
+            for (unsigned i = 0; i < size; ++i) {
+                rtn[i] = (*this)[i];
+            }
+            for (unsigned i = 0; i < other.length(); ++i) {
+                rtn[size+i] = other[i];
+            }
+            return rtn;
+        }
 		
 		bool operator== (const self& other) const
 		{

@@ -19,6 +19,12 @@ namespace util {
 		};
 		
         friend bool read_file(self&, const util::string&);
+
+        static bool file_exists(util::string& name)
+        {
+            std::ifstream f(name.c_str());
+            return f.good();
+        }
 				
 		pos get_pos()
 		{
@@ -111,7 +117,7 @@ namespace util {
 	}
 	
     bool read_file(file& f, const util::string& name)
-	{
+    {
 		char* cstr = new char[name.length() + 4];
 		unsigned i;
 		for (i = 0; i < name.length(); ++i) {
@@ -121,7 +127,7 @@ namespace util {
 		std::ifstream newfile;
 		newfile.open(cstr);
 		delete cstr;
-		if (!newfile.is_open()) {
+        if (!newfile.is_open()) {
 			return false;
 		}
 		std::string line;
