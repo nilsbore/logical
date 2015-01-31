@@ -22,7 +22,7 @@ namespace logic {
                 iter_type1 it1 = first.begin_row(y);
                 iter_type2 it2 = second.begin_row(y);
                 it1.set(it2);
-                while(it2 != first.end_row()) {
+                while (it2 != first.end_row()) {
                     *it1 += *it2;
                     it1.set(++it2);
                 }
@@ -43,7 +43,7 @@ namespace logic {
                 iter_type1 it1 = first.begin_row(y);
                 iter_type2 it2 = second.begin_row(y);
                 it1.set(it2);
-                while(it2 != first.end_row()) {
+                while (it2 != first.end_row()) {
                     *it1 += *it2;
                     it1.set(++it2);
                 }
@@ -52,15 +52,16 @@ namespace logic {
     };
 
     template<typename Matrix1>
-    struct Add<Matrix1, const scalar<double> > {
+    struct Add<Matrix1, const scalar<typename Matrix1::value_type> > {
+        typedef const scalar<typename Matrix1::value_type> scalar_type;
         typedef row_iterator<Matrix1> iter_type;
 
-        void operator() (Matrix1& first, const scalar<double>& second)
+        void operator() (Matrix1& first, scalar_type& second)
         {
             std::cout << "Using my fancy new Add function with a scalar" << std::endl;
             for (unsigned y = 0; y < first.height(); ++y) {
                 iter_type it = first.begin_row(y);
-                while(it != first.end_row()) {
+                while (it != first.end_row()) {
                     *it += second(0, 0);
                     ++it;
                 }
@@ -90,7 +91,7 @@ namespace logic {
                 iter_type1 it1 = first.begin_row(y);
                 iter_type2 it2 = second.begin_row(y);
                 it1.set(it2);
-                while(it2 != first.end_row()) {
+                while (it2 != first.end_row()) {
                     *it1 -= *it2;
                     it1.set(++it2);
                 }
@@ -99,15 +100,16 @@ namespace logic {
     };
 
     template<typename Matrix1>
-    struct Subtract<Matrix1, const scalar<double> > {
+    struct Subtract<Matrix1, const scalar<typename Matrix1::value_type> > {
+        typedef const scalar<typename Matrix1::value_type> scalar_type;
         typedef row_iterator<Matrix1> iter_type;
 
-        void operator() (Matrix1& first, const scalar<double>& second)
+        void operator() (Matrix1& first, scalar_type& second)
         {
             std::cout << "Using my fancy new Subtract function with a scalar" << std::endl;
             for (unsigned y = 0; y < first.height(); ++y) {
                 iter_type it = first.begin_row(y);
-                while(it != first.end_row()) {
+                while (it != first.end_row()) {
                     *it -= second(0, 0);
                     ++it;
                 }
@@ -137,7 +139,7 @@ namespace logic {
                 iter_type1 it1 = first.begin_row(y);
                 iter_type2 it2 = second.begin_row(y);
                 it1.set(it2);
-                while(it2 != first.end_row()) {
+                while (it2 != first.end_row()) {
                     *it1 = *it2;
                     it1.set(++it2);
                 }
@@ -184,7 +186,7 @@ namespace logic {
                 iter_type1 it1 = first.begin_row(y);
                 iter_type2 it2 = second.begin_row(y);
                 it1.set(it2);
-                while(it2 != first.end_row()) {
+                while (it2 != first.end_row()) {
                     *it1 *= *it2;
                     it1.set(++it2);
                 }
@@ -193,15 +195,16 @@ namespace logic {
     };
 
     template<typename Matrix1>
-    struct Multiply<Matrix1, const scalar<double> > {
+    struct Multiply<Matrix1, const scalar<typename Matrix1::value_type> > {
+        typedef const scalar<typename Matrix1::value_type> scalar_type;
         typedef row_iterator<Matrix1> iter_type;
 
-        void operator() (Matrix1& first, const scalar<double>& second)
+        void operator() (Matrix1& first, scalar_type& second)
         {
             std::cout << "Using my fancy new Multiply with a scalar" << std::endl;
             for (unsigned y = 0; y < first.height(); ++y) {
                 iter_type it = first.begin_row(y);
-                while(it != first.end_row()) {
+                while (it != first.end_row()) {
                     *it *= second(0, 0);
                     ++it;
                 }
@@ -231,7 +234,7 @@ namespace logic {
                 iter_type1 it1 = first.begin_row(y);
                 iter_type2 it2 = second.begin_row(y);
                 it1.set(it2);
-                while(it2 != first.end_row()) {
+                while (it2 != first.end_row()) {
                     *it1 /= *it2;
                     it1.set(++it2);
                 }
@@ -240,15 +243,16 @@ namespace logic {
     };
 
     template<typename Matrix1>
-    struct Divide<Matrix1, const scalar<double> > {
+    struct Divide<Matrix1, const scalar<typename Matrix1::value_type> > {
+        typedef const scalar<typename Matrix1::value_type> scalar_type;
         typedef row_iterator<Matrix1> iter_type;
 
-        void operator() (Matrix1& first, const scalar<double>& second)
+        void operator() (Matrix1& first, scalar_type& second)
         {
             std::cout << "Using my fancy new Divide function with a scalar" << std::endl;
             for (unsigned y = 0; y < first.height(); ++y) {
                 iter_type it = first.begin_row(y);
-                while(it != first.end_row()) {
+                while (it != first.end_row()) {
                     *it /= second(0, 0);
                     ++it;
                 }
@@ -278,7 +282,7 @@ namespace logic {
                 iter_type1 it1 = first.begin_row(y);
                 iter_type2 it2 = second.begin_row(y);
                 it1.set(it2);
-                while(it2 != first.end_row()) {
+                while (it2 != first.end_row()) {
                     *it1 = op(*it2);
                     it1.set(++it2);
                 }
@@ -299,7 +303,7 @@ namespace logic {
                 iter_type1 it1 = first.begin_row(y);
                 iter_type2 it2 = second.begin_row(y);
                 it1.set(it2);
-                while(it2 != first.end_row()) {
+                while (it2 != first.end_row()) {
                     *it1 = op(*it2);
                     it1.set(++it2);
                 }
@@ -308,15 +312,16 @@ namespace logic {
     };
 
     template<typename Operator, typename Matrix1>
-    struct ApplyAndStore<Operator, Matrix1, const scalar<double> > {
+    struct ApplyAndStore<Operator, Matrix1, const scalar<typename Matrix1::value_type> > {
+        typedef const scalar<typename Matrix1::value_type> scalar_type;
         typedef row_iterator<Matrix1> iter_type;
 
-        void operator() (Operator& op, Matrix1& first, const scalar<double>& second)
+        void operator() (Operator& op, Matrix1& first, scalar_type& second)
         {
             std::cout << "Using my fancy new ApplyAndStore function with a scalar" << std::endl;
             for (unsigned y = 0; y < first.height(); ++y) {
                 iter_type it = first.begin_row(y);
-                while(it != first.end_row()) {
+                while (it != first.end_row()) {
                     *it = op(second(0, 0));
                     ++it;
                 }

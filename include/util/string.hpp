@@ -143,7 +143,8 @@ namespace util {
 			return !(*this == other);
 		}
 		
-		unsigned hash_code() const {
+        unsigned hash_code() const
+        {
 			unsigned rtn = 1;
 			for (unsigned i = 0; i < size; ++i) {
 				rtn *= vals[i];
